@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.healthsignal.store.StoreMapper">
+    <!-- 스토어 총 물품 개수 출력-->
+    <select id="selectStoreCount" parameterType="storeVO" resultType="int">
+        SELECT
+            COUNT(STR_NO)
+        FROM
+            STORE
+        <where>
+            <if test="strCategory != null">
+                AND STR_CATEGORY = #{strCategory}
+            </if>
+        </where>
+    </select>
+    <!--스토어 물품 출력-->
+    <select id="selectStoreList" parameterType="storeVO" resultType="storeVO">
+        SELECT
+            STR_NAME, STR_LINK, STR_IMG, STR_PRICE
+        FROM
+            STORE
+        <where>
+            <if test="strCategory != null">
+                STR_CATEGORY = #{strCategory}
+            </if>
+        </where>
+        ORDER BY
+            STR_NO DESC
+        LIMIT
+            #{pageSize}
+        OFFSET
+            #{currentPage}
+    </select>
+</mapper>

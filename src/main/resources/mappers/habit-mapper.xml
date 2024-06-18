@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.healthsignal.habit.HabitMapper">
+    <!-- 습관목록 가져오기 -->
+    <select id="selectHabitList" parameterType="int" resultType="habitVO">
+        SELECT
+            HAB_NAME
+        FROM
+            HABIT
+        WHERE
+            USER_NO = #{userNo}
+    </select>
+    <!-- 습관체크 가져오기 -->
+    <select id="getHabitCheck" parameterType="int" resultType="habitCheckVO">
+        SELECT HABC_DATE
+        FROM HABIT_CHECK A
+        WHERE A.HAB_NO = #{habNo};
+    </select>
+    <!-- 습관번호 가져오기 -->
+    <select id="getHabitNo" parameterType="habitVO" resultType="int">
+        SELECT
+            HAB_NO
+        FROM
+            HABIT
+        WHERE
+            HAB_NAME = #{habName};
+    </select>
+    <!-- 습관체크 입력하기 -->
+    <insert id="insertHabitCheck" parameterType="habitCheckVO">
+        INSERT INTO
+            HABIT_CHECK
+            (HAB_NO, HABC_DATE)
+        VALUES
+            (#{habNo}, #{habcDate});
+    </insert>
+    <!-- 습관체크 삭제하기 -->
+    <delete id="deleteHabitCheck" parameterType="habitCheckVO">
+        DELETE FROM
+            HABIT_CHECK
+        WHERE
+            HAB_NO = #{habNo}
+            and
+            HABC_DATE = #{habcDate};
+    </delete>
+</mapper>
