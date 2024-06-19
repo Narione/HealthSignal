@@ -20,4 +20,7 @@ public class UserService {
     public UserVO getUserInfo(int userNo) {
         return userMapper.getUserInfo(userNo);
     }
+    public int updateUserProfile(UserVO userVO) {
+        return userMapper.updateUserProfile(userVO);
+    }
 }

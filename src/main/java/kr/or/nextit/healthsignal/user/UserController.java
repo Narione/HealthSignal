@@ -2,8 +2,12 @@ package kr.or.nextit.healthsignal.user;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
@@ -61,14 +65,38 @@ public class UserController {
     // 세션에 저장되어있는 유저 정보 가져오기
     @PostMapping("/getuserinfo")
     public ResponseEntity<?> getuserinfo() {
+        if (httpSession.getAttribute("loginUser") == null) {
+            return ResponseEntity.ok().body("getUserInfoFail");
+        }
         UserVO loginUser = (UserVO) httpSession.getAttribute("loginUser");
         int userNo = loginUser.getUserNo();
 
         UserVO result = userService.getUserInfo(userNo);
-        if (result == null) {
-            return ResponseEntity.ok().body("getUserInfoFail");
+        return ResponseEntity.ok().body(Objects.requireNonNullElse(result, "getUserInfoFail"));
+    }
+
+    // 유저 프로필 업데이트
+    @PostMapping("/update/profile")
+    public ResponseEntity<?> updateprofile(@RequestBody UserVO userVO) {
+        int result = userService.updateUserProfile(userVO);
+        if (result == 1) {
+            return ResponseEntity.ok().body("updateProfileSuccess");
         } else {
-            return ResponseEntity.ok().body(result);
+            return ResponseEntity.ok().body("updateProfileFail");
         }
     }
+
+    // 프로필 사진 업로드
+    @PostMapping("/file/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
+
+        String result = "이름은" + fileName + "타입은" + fileType;
+        return ResponseEntity.ok().body(result);
+    }
+
+//    // 업로드된 프로필 사진을 서버에 저장
+//    @PostMapping("/file/save")
+//    public ResponseEntity<?> saveFile(@RequestParam("file") MultipartFile file) {}
 }

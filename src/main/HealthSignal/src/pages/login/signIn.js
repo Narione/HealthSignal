@@ -29,13 +29,21 @@ const SignIn = () => {
                 {userId: id, userPw: pw});
             console.log(res.data);
             const data = res.data;
-            if(data == "불일치"){
-                setWarning(true)
+            if(data === "불일치"){
+                setWarning(true);
+                return;
             }
+            navigate(-1);
         } catch (error) {
             console.error('Error posting data:', error);
         }
     };
+
+    const pressEnter = (e) => {
+        if (e.key === 'Enter') {
+            goSignIn();
+        }
+    }
 
     return (
         <>
@@ -55,7 +63,7 @@ const SignIn = () => {
                                                required/>
                                         <input className="form-control main" type="password" placeholder="Password"
                                                onChange={pwOnChangeHandler}
-                                               required/>
+                                               required onKeyDown={pressEnter}/>
                                         {warning?<div style={{color: "red", marginBottom:"10px"}}>아이디 혹은 비밀번호가 일치하지않습니다.</div>:null}
                                         {noValue?<div style={{color: "green", marginBottom:"10px"}}>아이디, 비밀번호를 입력해주세요.</div>:null}
                                         <button className="btn btn-main-sm"

@@ -8,4 +8,5 @@ public interface UserMapper {
     UserVO idCheck(UserVO userVO);
     int insertUser(UserVO userVO);
     UserVO getUserInfo(int userNo);
+    int updateUserProfile(UserVO userVO);
 }

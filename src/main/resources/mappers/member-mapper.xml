@@ -35,15 +35,26 @@
     <!--세션에 저장되있는 유저 정보-->
     <select id="getUserInfo" parameterType="int" resultType="userVO">
         SELECT
-            USER_ID, USER_NAME, USER_NICKNAME, USER_GENDER, USER_BIRTH,
-            USER_EMAIL, USER_ADDRESS, USER_CITY, USER_PHOTO, USER_LIKETIME, USER_LIKEACTIVITY
+            USER_NO, USER_ID, USER_NAME, USER_NICKNAME, USER_GENDER, USER_BIRTH,
+            USER_EMAIL, USER_ADDRESS, USER_CITY, USER_PHOTO, USER_LIKETIME, USER_LIKEACTIVITY, USER_MESSAGE
         FROM
             USER
         WHERE
             USER_NO = #{userNo}
     </select>
+    <!--프로필정보 업데이트-->
+    <update id="updateUserProfile" parameterType="userVO">
+        UPDATE
+            USER
+        SET
+            USER_NICKNAME = #{userNickname},
+            USER_LIKETIME = #{userLiketime},
+            USER_LIKEACTIVITY = #{userLikeactivity},
+            USER_MESSAGE = #{userMessage}
+        WHERE
+            USER_NO = #{userNo}
+    </update>
     <!--모든 유저 정보 출력-->
-    <!--프로필사진 업데이트-->
     <!--관리자여부 확인-->
     <!--회원 탈퇴(유저 삭제)-->
 </mapper>

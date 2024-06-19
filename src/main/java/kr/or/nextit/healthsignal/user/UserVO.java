@@ -1,7 +1,6 @@
 package kr.or.nextit.healthsignal.user;
 
 import lombok.Data;
-
 import java.time.LocalDate;
 
 @Data
@@ -20,4 +19,5 @@ public class UserVO {
     private String userCity;
     private String userLiketime;
     private String userLikeactivity;
+    private String userMessage;
 }

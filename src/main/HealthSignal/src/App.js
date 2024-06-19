@@ -8,6 +8,8 @@ import Store from "./pages/store/store";
 import MyPage from "./pages/login/myPage";
 import SignIn from "./pages/login/signIn";
 import HabitCheck from "./pages/mySignal/habitCheck";
+import NoticeList from "./pages/customer/notice/list";
+import NoticeView from "./pages/customer/notice/view";
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
                 <Route path="/store" element={<Store/>}/>
                 <Route path="/mypage" element={<MyPage/>}/>
                 <Route path="/habitcheck" element={<HabitCheck/>}/>
+                <Route path="/noticelist" element={<NoticeList/>}/>
+                <Route path="/noticeview" element={<NoticeView/>}/>
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
 

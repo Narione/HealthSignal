@@ -1,18 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import WeatherComponent from "./Weather";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const Header = () => {
+    const navigate = useNavigate();
 
+    const [nowLoginFlag, setNowLoginFlag] = useState(false);
+    const [loginNickname, setLoginNickname] = useState("");
+
+    const loginCheck = () => {
+        axios.post("/api/getuserinfo")
+            .then(res => {
+                if (res.data === "getUserInfoFail") {
+                    setNowLoginFlag(false);  // 지금 로그인중인 유저의 정보가 세션에 없을때
+                } else {
+                    setNowLoginFlag(true);
+                    setLoginNickname(res.data.userNickname);
+                }
+            })
+    }
+
+    const goLogout = () => {
+        axios.post("/api/logout")
+            .then(res => {
+                if (res.data === "logoutSuccess") {
+                    setNowLoginFlag(false);
+                }
+            })
+        alert("로그아웃 되었습니다.");
+        navigate("/");
+    }
+
+    useEffect(() => {
+        loginCheck();
+    }, [nowLoginFlag]);
     return (
         <>
-            <div style={{display: "flex", justifyContent: "flex-end"}}>
+                {
+                    nowLoginFlag ?
+                        <div style={{display: "flex", justifyContent: "flex-end"}}>
+                            <a className="nav-link" onClick={() => navigate("/mypage")}>내정보</a>
+                            <a className="nav-link" onClick={() => goLogout()}>로그아웃</a>
+                            <div>{loginNickname}</div>
+                        </div>
+                    :
+                        <div style={{display: "flex", justifyContent: "flex-end"}}>
+                            <a className="nav-link" onClick={() => navigate("/signin")}>로그인</a>
+                            <a className="nav-link" onClick={() => navigate("/signup")}>회원가입</a>
+                        </div>
+                }
 
-                <a className="nav-link menu1" href="contact.html">내정보</a>
-                <a className="nav-link menu1" href="contact.html">회원가입</a>
-            </div>
+
             <nav className="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-4" style={{fontSize: "16px"}}>
                 <div className="container">
-                    <a className="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo"/></a>
+                    <a className="navbar-brand" onClick={() => navigate("/")}><img src="images/logo.png" alt="logo"/></a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="ti-menu"></span>
@@ -62,7 +104,7 @@ const Header = () => {
                                 </ul>
                             </li>
                             <li className="nav-item @@contact">
-                                <a className="nav-link menu1" href="contact.html">스토어</a>
+                                <a className="nav-link menu1" onClick={() => navigate("/store")}>스토어</a>
                             </li>
                             <li className="nav-item @@contact">
                                 <a className="nav-link menu1" href="contact.html">고객센터</a>

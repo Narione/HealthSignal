@@ -6,7 +6,7 @@
     <!-- 습관목록 가져오기 -->
     <select id="selectHabitList" parameterType="int" resultType="habitVO">
         SELECT
-            HAB_NAME
+            HAB_NO, USER_NO, HAB_NAME
         FROM
             HABIT
         WHERE

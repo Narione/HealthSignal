@@ -5,12 +5,11 @@ import '../../css/calendar.css';
 import axios from "axios";
 
 const HabitCheck = () => {
-
-    const [firsthabitNo, setFirsthabitNo] = useState(0);
     const [value, onChange] = useState(new Date());
     // 습관 완료 날짜
     const [marks, setMarks] = useState([]);
     const [habNo, setHabNo] = useState(0);
+    const [habNoList,setHabNoList] = useState([]);
 
     // button active
     const [activeIndex, setActiveIndex] = useState(0);
@@ -24,42 +23,31 @@ const HabitCheck = () => {
     }, []);
 
     useEffect(() => {
-        console.log(habits[0]);
-        if(habits.length >= 1){
-        setFirsthabitNo(getHabNoByHabName(habits[0]));
-
+        if(habNoList.length > 0){
+        setHabNo(habNoList[0])
         }
-    }, [habits]);
-
-    useEffect(() => {
-        console.log(firsthabitNo);
-        setHabNo(firsthabitNo);
-    }, [firsthabitNo]);
-
+    }, [habNoList]);
 
     //습관 체크 주기 & 체크 지우기
-    const clickDay = (value)=>{
+    const clickDay = async(value)=>{
         const formatDate = moment(value).format("YYYY-MM-DD");
-        if(marks.includes(formatDate)) {
-
-            // 문자열을 Date 객체로 변환
+        if (marks.includes(formatDate)) {
             const dateObject = new Date(formatDate);
-            // delete
-            deleteHabitCheck(habNo, dateObject);
-        }else{
-            // insert
-            insertHabitCheck(habNo, formatDate);
+            await deleteHabitCheck(habNo, dateObject);
+        } else {
+            await insertHabitCheck(habNo, formatDate);
         }
+        fetchHabitCheck(habNo); // Update marks after insert/delete operation
 
 
     }
 
     useEffect(() => {
-        fetchHabitCheck(habNo)
+        if(habNo!==0) {
+            fetchHabitCheck(habNo)
+        }
     }, [habNo]);
-    useEffect(()=>{
-        fetchHabitCheck(habNo);
-    },[marks])
+
 
 
 
@@ -81,6 +69,7 @@ const HabitCheck = () => {
                 }
             );
             setHabits(res.data.map(habit=>habit.habName))
+            setHabNoList(res.data.map(habit=>habit.habNo))
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -151,7 +140,7 @@ const HabitCheck = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-12 col-md-7">
+                    <div className="col-12 col-lg-5 col-sm-7">
                         <div className="p-3 border bg-light">
                             {/*Right Component*/}
 
