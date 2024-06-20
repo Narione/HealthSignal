@@ -37,24 +37,24 @@ const Header = () => {
     }, [nowLoginFlag]);
     return (
         <>
-                {
-                    nowLoginFlag ?
-                        <div style={{display: "flex", justifyContent: "flex-end"}}>
-                            <a className="nav-link" onClick={() => navigate("/mypage")}>내정보</a>
-                            <a className="nav-link" onClick={() => goLogout()}>로그아웃</a>
-                            <div>{loginNickname}</div>
-                        </div>
+            {
+                nowLoginFlag ?
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <a className="nav-link" onClick={() => navigate("/mypage")}>내정보</a>
+                        <a className="nav-link" onClick={() => goLogout()}>로그아웃</a>
+                        <div>{loginNickname}</div>
+                    </div>
                     :
-                        <div style={{display: "flex", justifyContent: "flex-end"}}>
-                            <a className="nav-link" onClick={() => navigate("/signin")}>로그인</a>
-                            <a className="nav-link" onClick={() => navigate("/signup")}>회원가입</a>
-                        </div>
-                }
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <a className="nav-link" onClick={() => navigate("/signin")}>로그인</a>
+                        <a className="nav-link" onClick={() => navigate("/signup")}>회원가입</a>
+                    </div>
+            }
 
 
             <nav className="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-4" style={{fontSize: "16px"}}>
                 <div className="container">
-                    <a className="navbar-brand" onClick={() => navigate("/")}><img src="images/logo.png" alt="logo"/></a>
+                    <a className="navbar-brand" onClick={() => navigate("/")}><img src="/images/logo.png" alt="logo"/></a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="ti-menu"></span>
@@ -113,7 +113,7 @@ const Header = () => {
 
                     </div>
 
-                <WeatherComponent/>
+                    <WeatherComponent/>
                 </div>
             </nav>
 

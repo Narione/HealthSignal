@@ -27,8 +27,8 @@ function App() {
                 <Route path="/store" element={<Store/>}/>
                 <Route path="/mypage" element={<MyPage/>}/>
                 <Route path="/habitcheck" element={<HabitCheck/>}/>
-                <Route path="/noticelist" element={<NoticeList/>}/>
-                <Route path="/noticeview" element={<NoticeView/>}/>
+                <Route path="/notice/list" element={<NoticeList/>}/>
+                <Route path="/notice/view/:ntcNo" element={<NoticeView/>}/>
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
 

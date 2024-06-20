@@ -1,24 +1,47 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {useBeforeUnload, useNavigate} from "react-router-dom";
+
 
 
 const MyPage = () => {
     const uploadBtn = useRef();
+    const confirmNewPasswordRef = useRef();
+    const currentPasswordRef = useRef();
+    const newPasswordRef = useRef();
+    const passwordFormRef = useRef();
+
     const navigate = useNavigate();
 
     // 세션에 저장된 유저 정보
     const [userInfo, setUserInfo] = useState({});
 
+    const [userName, setUserName] = useState("");
+    const [userId, setUserId] = useState("");
+    const [userAddress, setUserAddress] = useState("");
+    const [userEmail, setUserEmail] = useState("");
+    const [userBirth, setUserBirth] = useState("");
     const [userNo, setUserNo] = useState(0);
     const [userNickname, setUserNickname] = useState("");
+    const [userGender, setUserGender] = useState("");
     const [userLikeTime, setUserLikeTime] = useState("");
     const [userLikeActivity, setUserLikeActivity] = useState("");
     const [userMessage, setUserMessage] = useState("");
-    const [userPhoto, setUserPhoto] = useState("/images/profile/saryo.jpg");
+    const [userPhoto, setUserPhoto] = useState("");
+
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+
+    const [changeProfileFlag, setChangeProfileFlag] = useState(false);
+    const [userPreview, setUserPreview] = useState("");
+
+    const [passwordConfirmFlag, setPasswordConfirmFlag] = useState(true);
+    const [currentPasswordFlag, setCurrentPasswordFlag] = useState(true);
+
     // 첨부파일 관련
     const [selectedFile, setSelectedFile] = useState(null);
-    const [imageSrc, setImageSrc] = useState("");
 
     const nicknameOnChangeHandler = useCallback((e) => {
         setUserNickname(e.target.value);
@@ -32,6 +55,16 @@ const MyPage = () => {
     const messageOnChangeHandler = useCallback((e) => {
         setUserMessage(e.target.value);
     }, []);
+    const currentPasswordOnchangeHandler = useCallback((e) => {
+        setCurrentPassword(e.target.value);
+    }, []);
+    const newPasswordOnChangeHandler = useCallback((e) => {
+        setNewPassword(e.target.value);
+    }, []);
+    const confirmNewPasswordOnChangeHandler = useCallback((e) => {
+        setConfirmNewPassword(e.target.value);
+    }, []);
+
 
     const fileOnChangeHandler = useCallback((e) => {
         setSelectedFile(e.target.files[0]);
@@ -43,20 +76,38 @@ const MyPage = () => {
 
     useEffect(() => {
         if (userInfo != {}) {
+            setUserName(userInfo.userName);
+            setUserId(userInfo.userId);
+            setUserAddress(userInfo.userAddress);
+            setUserEmail(userInfo.userEmail);
+            setUserBirth(userInfo.userBirth);
             setUserNo(userInfo.userNo);
             setUserNickname(userInfo.userNickname);
             setUserLikeTime(userInfo.userLiketime);
             setUserLikeActivity(userInfo.userLikeactivity);
             setUserMessage(userInfo.userMessage);
+            setUserPhoto(userInfo.userPhoto);
+            setUserGender(userInfo.userGender);
+
+            if (userInfo.userPhoto) {
+                setUserPreview("/images/profile/" + userInfo.userPhoto);
+            }
         }
 
     }, [userInfo]);
 
-    // useEffect(() => {
-    //     if (!selectedFile) {
-    //         uploadSelectFile()
-    //     }
-    // }, [selectedFile]);
+    useEffect(() => {
+        if (selectedFile) {
+            encodeFileToBase64(selectedFile);
+            if (changeProfileFlag) {
+                // 기존 프로필 이미지 파일 삭제
+                deleteOldFile();
+            }
+            // 업로드된 프로필 이미지 파일을 pc에 저장
+            uploadSelectFile();
+            setChangeProfileFlag(true);
+        }
+    }, [selectedFile]);
 
     // 현재 세션에 접속되있는 유저의 정보 얻어오기
     const getUserInfo = () => {
@@ -68,12 +119,14 @@ const MyPage = () => {
     }
 
     const goProfileUpdate = () => {
+
         axios.post("api/update/profile", {
             userNo: userNo,
             userNickname: userNickname,
             userLiketime: userLikeTime,
             userLikeactivity: userLikeActivity,
-            userMessage: userMessage
+            userMessage: userMessage,
+            userPhoto: userPhoto
         }).then(res => {
             if (res.data === "updateProfileSuccess") {
                 alert("프로필 정보가 업데이트 되었습니다.");
@@ -86,21 +139,26 @@ const MyPage = () => {
     const goClickUpload = () => {
         uploadBtn.current.click();
     }
+
     const uploadSelectFile = () => {
-        // const formData = new FormData();
-        // formData.append("file", selectedFile);
-        //
-        // axios.post("/api/file/upload", formData, {
-        //     headers: {
-        //         'Content-Type':'multipart/form-data'
-        //     }
-        // }).then(res => {
-        //     console.log(res.data);
-        // });
-        console.log(selectedFile);
-        encodeFileToBase64(selectedFile);
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        axios.post("/api/file/upload", formData, {
+            headers: {
+                'Content-Type':'multipart/form-data'
+            }
+        }).then(res => {
+            setUserPhoto(res.data);
+            return(res.data);
+        });
+    }
 
-
+    const deleteOldFile = () => {
+        axios.post("/api/file/delete", userPhoto)
+            .then(res => {
+            return(res.data)
+            }
+        )
     }
 
     const encodeFileToBase64 = (fileBlob) => {
@@ -108,12 +166,60 @@ const MyPage = () => {
         reader.readAsDataURL(fileBlob);
         return new Promise((resolve) => {
             reader.onload = () => {
-                setUserPhoto(reader.result);
+                setUserPreview(reader.result);
                 resolve();
             };
         });
     };
 
+    const goUpdatePw = (e) => {
+        e.preventDefault();
+        if (!passwordFormRef.current.checkValidity()) {
+            passwordFormRef.current.reportValidity();
+        } else {
+
+            setCurrentPasswordFlag(true);
+            setPasswordConfirmFlag(true);
+            if ( (newPassword !== confirmNewPassword) && (newPassword !== "") ) {
+                setPasswordConfirmFlag(false);
+                currentPasswordRef.current.value = "";
+                newPasswordRef.current.value = "";
+                confirmNewPasswordRef.current.value = "";
+                return
+            } else {
+                setPasswordConfirmFlag(true);
+                axios.post("/api/login", {
+                    userId: userId,
+                    userPw: currentPassword
+                }).then(
+                    res => {
+                        if (res.data === "불일치") {
+                            setCurrentPasswordFlag(false);
+                            currentPasswordRef.current.value = "";
+                            newPasswordRef.current.value = "";
+                            confirmNewPasswordRef.current.value = "";
+                        } else {
+                            console.log(newPassword);
+                            axios.post("/api/update/password", {
+                                userNo: userNo,
+                                userPw: newPassword
+                            }).
+                            then(res => {
+                                if (res.data === "updatePasswordSuccess") {
+                                    alert("비밀번호 변경이 완료되었습니다.");
+                                    navigate("/mypage");
+                                    window.location.reload();
+                                }
+                            })
+                        }
+                    }
+                )
+            }
+        }
+
+
+
+    }
 
     return (
 
@@ -128,14 +234,23 @@ const MyPage = () => {
                                     <div className="card-body">
                                         <div className="text-center">
                                             <img
-                                                // src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-19/ic_user-1.png"
-                                                src={userPhoto}
+                                                src = {
+                                                     // 만약 userPhoto가 없으면 성별에 따라 기본 프로필 이미지 분기
+                                                    userPreview ? userPreview : userGender === "m" ? "/images/profile/male.jpg" : "/images/profile/female.jpg"
+                                                }
+                                                // src={userPreview}
                                                 className="img-fluid rounded-circle align-content-center"
-                                                style={{width: '200px', height: '200px', border:'solid 1px'}}
+                                                style={{width: '200px', height: '200px', border: 'solid 1px'}}
                                                 alt="profile"
                                             />
 
+                                            <div className="d-grid mt-3 text-center">
+                                                <button className="btn btn-outline-primary" type="button"
+                                                        onClick={goClickUpload}>수정
+                                                </button>
+                                            </div>
                                             <h5 className="text-center mb-1 mt-3">{userNickname}</h5>
+
                                         </div>
 
 
@@ -149,13 +264,7 @@ const MyPage = () => {
                                                 <span>42</span>
                                             </li>
                                         </ul>
-                                        <div className="d-grid m-0 text-center">
-                                            <form>
-                                                <input type="file" id="fileInput" style={{display:"none"}} onChange={fileOnChangeHandler} ref={uploadBtn} accept=".jpg, .png, .gif"/>
-                                                <button className="btn btn-outline-primary" type="button" onClick={goClickUpload}>프로필 이미지 수정</button>
-                                            </form>
 
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -188,65 +297,45 @@ const MyPage = () => {
                                     <div className="tab-pane fade" id="overview-tab-pane" role="tabpanel"
                                          aria-labelledby="overview-tab" tabIndex="0">
 
-                                        <h5 className="mb-3">상세정보</h5>
+
                                         <div className="row g-0">
                                             <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">닉네임</div>
+                                                <div className="p-2">아이디</div>
                                             </div>
                                             <div
                                                 className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">gudrn</div>
+                                                <div className="p-2">{userId}</div>
                                             </div>
 
                                             <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">지역</div>
+                                                <div className="p-2">이름</div>
                                             </div>
                                             <div
                                                 className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">대전광역시 중구 계룡로 825 (용두동, 희영빌딩 2층) 201호</div>
+                                                <div className="p-2">{userName}</div>
                                             </div>
                                             <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">Address</div>
+                                                <div className="p-2">주소</div>
                                             </div>
                                             <div
                                                 className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">Mountain View, California</div>
+                                                <div className="p-2">{userAddress}</div>
                                             </div>
                                             <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">Country</div>
+                                                <div className="p-2">생년월일</div>
                                             </div>
                                             <div
                                                 className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">United States</div>
+                                                <div className="p-2">{userBirth}</div>
                                             </div>
                                             <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">Job</div>
+                                                <div className="p-2">이메일</div>
                                             </div>
                                             <div
                                                 className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">Project Manager</div>
+                                                <div className="p-2">{userEmail}</div>
                                             </div>
-                                            <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">Company</div>
-                                            </div>
-                                            <div
-                                                className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">GitHub Inc</div>
-                                            </div>
-                                            <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">Phone</div>
-                                            </div>
-                                            <div
-                                                className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">+1 (248) 679-8745</div>
-                                            </div>
-                                            <div className="col-5 col-md-3 bg-light border-bottom border-white border-3">
-                                                <div className="p-2">Email</div>
-                                            </div>
-                                           <div
-                                                className="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                                <div className="p-2">leo@example.com</div>
-                                            </div>
+
                                         </div>
                                     </div>
                                     <div className="tab-pane fade show active" id="profile-tab-pane" role="tabpanel"
@@ -290,33 +379,53 @@ const MyPage = () => {
                                                 <label htmlFor="inputMessage" className="mt-2">상태 메세지</label>
                                                 <div className="row">
                                                     <div className="col-12 mt-2">
-                                                    <textarea style={{width: '328px', height: '150px'}} onChange={messageOnChangeHandler} value={userMessage} />
+                                                        <textarea style={{width: '328px', height: '150px'}}
+                                                                  onChange={messageOnChangeHandler}
+                                                                  value={userMessage}/>
                                                     </div>
                                                 </div>
-                                                <button type="button" className="btn btn-primary mt-4" onClick={goProfileUpdate}>저장</button>
-                                                <button type="button" className="btn btn-primary mt-4" onClick={uploadSelectFile}>프로필 이미지 저장</button>
+                                                <form>
+                                                    <input type="file" id="fileInput" style={{display: "none"}}
+                                                           onChange={fileOnChangeHandler} ref={uploadBtn}
+                                                           accept=".jpg, .png, .gif"/>
+                                                    <button type="button" className="btn btn-primary mt-4"
+                                                            onClick={goProfileUpdate}>저장
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="tab-pane fade" id="password-tab-pane" role="tabpanel"
                                          aria-labelledby="password-tab" tabIndex="0">
-                                        <form action="">
+                                        <form action="" ref={passwordFormRef} className={'needs-validation'}>
                                         <div className="row gy-3 gy-xxl-4">
-                                            <div className="col-12">
+                                                <div className="col-12">
                                                     <label htmlFor="currentPassword" className="form-label">현재 비밀번호</label>
-                                                    <input type="password" className="form-control" id="currentPassword"/>
+                                                    <input type="password" className="form-control" ref={currentPasswordRef} onChange={currentPasswordOnchangeHandler} required/>
                                                 </div>
                                                 <div className="col-12">
                                                     <label htmlFor="newPassword" className="form-label mt-2">새 비밀번호</label>
-                                                    <input type="password" className="form-control" id="newPassword"/>
+                                                    <input type="password" className="form-control" ref={newPasswordRef} onChange={newPasswordOnChangeHandler} required/>
                                                 </div>
                                                 <div className="col-12">
                                                     <label htmlFor="confirmPassword" className="form-label mt-2">비밀번호 확인</label>
-                                                    <input type="password" className="form-control" id="confirmPassword"/>
+                                                    <input type="password" className="form-control" ref={confirmNewPasswordRef} onChange={confirmNewPasswordOnChangeHandler} required/>
                                                 </div>
+
                                                 <div className="col-12">
-                                                    <button type="submit" className="btn btn-primary mt-4" >비밀번호 변경
+                                                    {
+                                                        !passwordConfirmFlag ?
+                                                            <div style={{color: "red"}}>비밀번호와 비밀번호 확인이 일치하지 않습니다.</div> :
+                                                            null
+                                                    }
+                                                    {
+                                                        !currentPasswordFlag ?
+                                                            <div style={{color: "red"}}>현재 비밀번호가 일치하지 않습니다.</div> :
+                                                            null
+                                                    }
+
+                                                    <button type="submit" onClick={goUpdatePw} className="btn btn-primary mt-4" >비밀번호 변경
                                                     </button>
                                                 </div>
 

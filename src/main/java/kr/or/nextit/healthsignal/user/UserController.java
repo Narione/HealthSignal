@@ -7,7 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
@@ -88,15 +94,42 @@ public class UserController {
 
     // 프로필 사진 업로드
     @PostMapping("/file/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        String fileType = file.getContentType();
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
 
-        String result = "이름은" + fileName + "타입은" + fileType;
-        return ResponseEntity.ok().body(result);
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+        int dotIndex = originalFilename.lastIndexOf('.');
+        if (dotIndex > 0) {
+            extension = originalFilename.substring(dotIndex);
+        }
+        String uniqueFilename = UUID.randomUUID().toString() + extension;
+
+        String filePath = System.getProperty("user.dir") + "\\src\\main\\HealthSignal\\public\\images\\profile";
+        File saveFile = new File(filePath, uniqueFilename);
+        file.transferTo(saveFile);
+
+        // 서버에 파일 저장하고 고유 파일이름 응답
+        return ResponseEntity.ok().body(uniqueFilename);
     }
 
-//    // 업로드된 프로필 사진을 서버에 저장
-//    @PostMapping("/file/save")
-//    public ResponseEntity<?> saveFile(@RequestParam("file") MultipartFile file) {}
+    // 기존 프로필 사진 삭제
+    @PostMapping("file/delete")
+    public ResponseEntity<?> deleteFile(@RequestBody String userPhoto) {
+        String filePath = System.getProperty("user.dir") + "\\src\\main\\HealthSignal\\public\\images\\profile\\";
+        File file = new File(filePath + userPhoto.substring(0, userPhoto.length() -1));
+        boolean delete = file.delete();
+
+        return ResponseEntity.ok().body("deleteSuccess");
+    }
+
+    // 비밀번호 변경
+    @PostMapping("update/password")
+    public ResponseEntity<?> updatePassword(@RequestBody UserVO userVO) {
+        int result = userService.updateUserPw(userVO);
+        if (result == 1) {
+            return ResponseEntity.ok().body("updatePasswordSuccess");
+        } else {
+            return ResponseEntity.ok().body("updatePasswordFail");
+        }
+    }
 }

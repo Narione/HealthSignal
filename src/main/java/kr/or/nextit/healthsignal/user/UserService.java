@@ -23,4 +23,7 @@ public class UserService {
     public int updateUserProfile(UserVO userVO) {
         return userMapper.updateUserProfile(userVO);
     }
+    public int updateUserPw(UserVO userVO) {
+        return userMapper.updateUserPw(userVO);
+    }
 }

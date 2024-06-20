@@ -50,11 +50,20 @@
             USER_NICKNAME = #{userNickname},
             USER_LIKETIME = #{userLiketime},
             USER_LIKEACTIVITY = #{userLikeactivity},
-            USER_MESSAGE = #{userMessage}
+            USER_MESSAGE = #{userMessage},
+            USER_PHOTO = #{userPhoto}
         WHERE
             USER_NO = #{userNo}
     </update>
+    <!--비밀번호 변경-->
+    <update id="updateUserPw" parameterType="userVO">
+        UPDATE
+            USER
+        SET
+            USER_PW = #{userPw}
+        WHERE
+            USER_No = #{userNo}
+    </update>
     <!--모든 유저 정보 출력-->
-    <!--관리자여부 확인-->
     <!--회원 탈퇴(유저 삭제)-->
 </mapper>

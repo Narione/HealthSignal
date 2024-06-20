@@ -9,4 +9,5 @@ public interface UserMapper {
     int insertUser(UserVO userVO);
     UserVO getUserInfo(int userNo);
     int updateUserProfile(UserVO userVO);
+    int updateUserPw(UserVO userVO);
 }

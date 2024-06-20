@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const NoticeView = () => {
+  const { ntcNo } = useParams();
+  const [notice, setNotice] = React.useState(null);
+
+  useEffect(() => {
+    getNoticeView();
+  }, []);
+
+  const getNoticeView = async () => {
+    try {
+      const res = await axios.get(`/api/notice/view/${ntcNo}`);
+      setNotice(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="container mt-5 mb-5">
@@ -11,45 +29,50 @@ const NoticeView = () => {
         </div>
         <div className="row">
           <div className="col-md-12 col-12">
-            <div className="card">
-              <div className="table-responsive">
-                <table className="text-nowrap mb-0 table">
-                  <thead className="table-light">
-                    <tr>
-                      <th>
-                          <div>제목</div>
-                          <div>작성자:</div>
-                          <div><span>날짜:</span><span className="ml-5">조회수: </span></div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="align-middle">
-                        <div className="d-flex align-items-center">
+            {notice ? (
+              <div className="card">
+                <div className="table-responsive">
+                  <table className="text-nowrap mb-0 table">
+                    <thead className="table-light">
+                      <tr>
+                        <th style={{ fontWeight: "normal" }}>
+                          <div
+                            style={{ fontSize: "25px", fontWeight: "normal" }}
+                          >
+                            {notice.ntcTitle}
+                          </div>
+                          <div>{notice.userNo}</div>
                           <div>
-                            <div className="icon-shape icon-md border p-4 rounded-1 bg-white">
-                              <img
-                                src="/images/brand/dropbox-logo.svg"
-                                alt=""
-                                className=""
-                              />
+                            <span>{notice.ntcCreDate}</span>
+                            <span className="ml-5">
+                              조회 {notice.ntcHits}{" "}
+                            </span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="align-middle">
+                          <div className="d-flex align-items-center">
+                            <div className="ms-3 lh-1">
+                              <div>{notice.ntcContent}</div>
                             </div>
                           </div>
-                          <div className="ms-3 lh-1">
-                            <h5 className=" mb-1">
-                              <a className="text-inherit" href="/#">
-                                Dropbox Design System
-                              </a>
-                            </h5>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="bg-white text-center card-footer">
+                  <div className="container text-right">
+                    <button className="btn btn-primary">목록</button>
+                    <button className="btn btn-secondary ml-2">수정</button>
+                    <button className="btn btn-danger ml-2">삭제</button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </div>
