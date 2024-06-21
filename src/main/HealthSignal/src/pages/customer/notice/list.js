@@ -41,10 +41,11 @@ const NoticeList = () => {
                   <thead className="table-light">
                     <tr>
                       <th style={{width: "7%", textAlign:"center"}}>번호</th>
-                      <th>제목</th>
+                      <th style={{textAlign:"center"}}>제목</th>
                       <th style={{width: "7%", textAlign:"center"}}>조회수</th>
-                      <th style={{width: "15%", textAlign:"center"}}>작성자</th>
-                      <th style={{width: "15%", textAlign:"center"}}>작성일</th>
+                      <th style={{width: "10%", textAlign:"center"}}>작성자</th>
+                      <th style={{width: "10%", textAlign:"center"}}>작성일</th>
+                      <th style={{width: "10%", textAlign:"center"}}>처리상태</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -57,7 +58,9 @@ const NoticeList = () => {
                           <td className="align-middle">
                             <div className="d-flex align-items-center">
                               <div className="ms-3 lh-1">
-                                <a className="text-inherit" onClick={()=>{navigate(`/notice/view/${v.ntcNo}`)}}>
+                                <a className="text-inherit text-black text-decoration-none" onClick={() => {
+                                  navigate(`/notice/view/${v.ntcNo}`)
+                                }}>
                                   {v.ntcTitle}
                                 </a>
                               </div>
@@ -71,6 +74,9 @@ const NoticeList = () => {
                           </td>
                           <td className="align-middle text-center">
                             <span>{v.ntcCreDate}</span>
+                          </td>
+                          <td className="align-middle text-center">
+                            <span>답변대기</span>
                           </td>
                         </tr>);
                   })}
