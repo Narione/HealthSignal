@@ -43,4 +43,15 @@ public class HabitController {
         return selectedHabNo;
     }
 
+    @PostMapping("/addhabit")
+    public int addHabit(@RequestBody HabitVO habitVO){
+        int result = habitService.addHabit(habitVO);
+        return result;
+    }
+
+    @PostMapping("/deletehabit")
+    public int deleteHabit(@RequestBody HabitVO habitVO){
+        int result = habitService.deleteHabit(habitVO);
+        return result;
+    }
 }

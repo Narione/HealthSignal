@@ -25,7 +25,9 @@
         FROM
             HABIT
         WHERE
-            HAB_NAME = #{habName};
+            USER_NO = #{userNo}
+            AND
+            HAB_NAME = #{habName}
     </select>
     <!-- 습관체크 입력하기 -->
     <insert id="insertHabitCheck" parameterType="habitCheckVO">
@@ -44,4 +46,20 @@
             and
             HABC_DATE = #{habcDate};
     </delete>
+    <!--습관 추가하기-->
+    <insert id="addHabit" parameterType="habitVO">
+        insert into
+            habit
+            (user_no, hab_name)
+        values
+            (#{userNo}, #{habName})
+    </insert>
+    <!--습관 삭제하기-->
+    <delete id="deleteHabit" parameterType="habitVO">
+        DELETE FROM
+            HABIT
+        WHERE
+            HAB_NO = #{habNo}
+    </delete>
+
 </mapper>

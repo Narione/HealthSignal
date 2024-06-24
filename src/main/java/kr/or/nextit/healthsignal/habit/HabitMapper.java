@@ -14,4 +14,6 @@ public interface HabitMapper {
     int insertHabitCheck(HabitCheckVO habitCheckVO);
     int deleteHabitCheck(HabitCheckVO habitCheckVO);
     int getHabitNo(HabitVO habitVO);
+    int addHabit(HabitVO habitVO);
+    int deleteHabit(HabitVO habitVO);
 }

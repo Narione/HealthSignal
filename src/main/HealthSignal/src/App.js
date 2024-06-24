@@ -10,6 +10,9 @@ import SignIn from "./pages/login/signIn";
 import HabitCheck from "./pages/mySignal/habitCheck";
 import NoticeList from "./pages/customer/notice/list";
 import NoticeView from "./pages/customer/notice/view";
+import QnaList from "./pages/customer/qna/list";
+import QnaView from "./pages/customer/qna/view";
+import UserAdd from "./pages/customer/qna/userAdd";
 
 function App() {
 
@@ -29,6 +32,9 @@ function App() {
                 <Route path="/habitcheck" element={<HabitCheck/>}/>
                 <Route path="/notice/list" element={<NoticeList/>}/>
                 <Route path="/notice/view/:ntcNo" element={<NoticeView/>}/>
+                <Route path="/qna/list" element={<QnaList/>} />
+                <Route path="/qna/view" element={<QnaView/>} />
+                <Route path="/qna/user/add" element={<UserAdd/>} />
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
 

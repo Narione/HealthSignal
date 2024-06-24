@@ -30,4 +30,8 @@ public class HabitService {
     public int getHabitNo(HabitVO habitVO) {
         return habitMapper.getHabitNo(habitVO);
     }
+
+
+    public int addHabit(HabitVO habitVO) { return habitMapper.addHabit(habitVO);}
+    public int deleteHabit(HabitVO habitVO) { return habitMapper.deleteHabit(habitVO); }
 }

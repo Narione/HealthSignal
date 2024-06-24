@@ -52,7 +52,7 @@ const Header = () => {
             }
 
 
-            <nav className="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-4" style={{fontSize: "16px"}}>
+            <nav className="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-4" style={{fontSize: "16px", zIndex:"1000"}}>
                 <div className="container">
                     <a className="navbar-brand" onClick={() => navigate("/")}><img src="/images/logo.png" alt="logo"/></a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
