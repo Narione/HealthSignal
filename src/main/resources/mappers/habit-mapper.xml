@@ -11,6 +11,8 @@
             HABIT
         WHERE
             USER_NO = #{userNo}
+        ORDER BY
+            HAB_NO ASC
     </select>
     <!-- 습관체크 가져오기 -->
     <select id="getHabitCheck" parameterType="int" resultType="habitCheckVO">

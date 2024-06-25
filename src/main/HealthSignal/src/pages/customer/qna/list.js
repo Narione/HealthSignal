@@ -23,7 +23,7 @@ const QnaList = () => {
       <div className="container mt-5 mb-5">
         <div className="row mb-3">
           <div className="col-12 mb-3">
-            <h3 className="text-center">공지사항</h3>
+            <h3 className="text-center">문의 게시판</h3>
           </div>
           <div className="col-12 text-right">
             <button
@@ -42,7 +42,6 @@ const QnaList = () => {
                     <tr>
                       <th style={{width: "7%", textAlign:"center"}}>번호</th>
                       <th style={{textAlign:"center"}}>제목</th>
-                      <th style={{width: "7%", textAlign:"center"}}>조회수</th>
                       <th style={{width: "10%", textAlign:"center"}}>작성자</th>
                       <th style={{width: "10%", textAlign:"center"}}>작성일</th>
                       <th style={{width: "10%", textAlign:"center"}}>처리상태</th>
@@ -65,9 +64,6 @@ const QnaList = () => {
                                 </a>
                               </div>
                             </div>
-                          </td>
-                          <td className="align-middle text-center">
-                            <span>{v.ntcHits}</span>
                           </td>
                           <td className="align-middle text-center">
                             <span>{v.userNo}</span>
