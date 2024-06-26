@@ -1,9 +1,10 @@
-import { useCallback, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
     const navigate = useNavigate();
+    const sidoRef = useRef();
 
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
@@ -14,6 +15,7 @@ export default function SignUp() {
     const [gender, setGender] = useState("");
     const [birth, setBirth] = useState("");
     const [address, setAddress] = useState("");             /* 상세 주소 */
+    const [sidoAddress, setSidoAddress] = useState("");
     const [cmpAddress, setCmpAddress] = useState("");       /* 완성된 형식의 주소 */
 
     const [daumAddr, setDaumAddr] = useState({})
@@ -47,9 +49,13 @@ export default function SignUp() {
     }, []);
     const addressOnChangeHandler = useCallback((e) => {
         setAddress(e.target.value);
-        // 주소 형식 설정
-        setCmpAddress(daumAddr.addr+" "+address+daumAddr.extraAddr)
+
     }, []);
+    const sidoAddressOnChangeHandler = useCallback((e) => {
+        setSidoAddress(e.target.value);
+    }, []);
+
+
 
     const [idCheckFlag, setIdCheckFlag] = useState(false);
     const [signupFlag, setSignupFlag] = useState(false);
@@ -76,11 +82,7 @@ export default function SignUp() {
 
     const goSignUp = async () => {
 
-        console.log(daumAddr.addr)
-        console.log(address)
-        console.log(daumAddr.extraAddr)
-
-
+        console.log(daumAddr);
         setSignupFlag(true);
         if (validationCheck()) {
             axios.post("api/signup", {
@@ -91,12 +93,15 @@ export default function SignUp() {
                 userEmail: email,
                 userGender: gender,
                 userBirth: birth,
-                userAddress: cmpAddress
+                userAddress: cmpAddress,
+                userCity: sidoAddress
             }).then((res) => {
                 alert("회원가입이 완료되었습니다.");
                 navigate("/");
             });
         }
+        console.log(cmpAddress)
+        console.log(sidoAddress);
     }
 
     const goIdCheck = () => {
@@ -127,7 +132,12 @@ export default function SignUp() {
         idCheckColor: 'red'
     });
 
-
+    useEffect(() => {
+        if (daumAddr !== {}) {
+            setCmpAddress(daumAddr.addr + " " + address + daumAddr.extraAddr);
+            setSidoAddress(daumAddr.sido);
+        }
+    }, [daumAddr, address]);
 
     function sample6_execDaumPostcode() {
 
@@ -140,6 +150,7 @@ export default function SignUp() {
 
                 let addr = ''; // 주소 변수
                 let extraAddr = ''; // 참고항목 변수
+                // let shorthand: false;
 
                 //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
@@ -163,8 +174,6 @@ export default function SignUp() {
                     if (extraAddr !== '') {
                         extraAddr = ' (' + extraAddr + ')';
                     }
-                    // 조합된 참고항목을 해당 필드에 넣는다.
-                    // document.getElementById("sample6_extraAddress").value = extraAddr;
 
                 } else {
                     document.getElementById("sample6_extraAddress").value = '';
@@ -176,11 +185,8 @@ export default function SignUp() {
                 // 커서를 상세주소 필드로 이동한다.
                 document.getElementById("sample6_detailAddress").focus();
 
-
                 // 주소 데이터 생성
-                setDaumAddr({zipcode: data.zonecode, addr: addr, extraAddr: extraAddr})
-                // console.log(daumAddr.addr)
-                // console.log(daumAddr.extraAddr)
+                setDaumAddr({zipcode: data.zonecode, addr: addr, extraAddr: extraAddr, sido: data.sido});
             }
         }).open()
 
@@ -198,7 +204,7 @@ export default function SignUp() {
                             <div className="d-flex justify-content-center align-items-center">
                                 <div className="content text-center border p-5" style={{ width: '500px' }}>
                                     <div className="logo mb-5">
-                                        <a href="index.html"><img src="images/logo.png" alt=""/></a>
+                                        <a onClick={() => navigate("/")}><img src="images/logo.png" alt=""/></a>
                                     </div>
                                     <form>
                                         <div style={{display: 'flex', alignItems: 'center'}}>
@@ -316,6 +322,7 @@ export default function SignUp() {
                                         <input type="text" id="sample6_extraAddress" placeholder="참고항목"
                                                className="form-control main" readOnly value={daumAddr.extraAddr}
                                                style={{width: "49%", display: "inline", marginLeft: "5px"}}/>
+                                        <input type="hidden" onChange={sidoAddressOnChangeHandler} />
 
                                         <div style={{
                                             color: "red",
@@ -324,10 +331,10 @@ export default function SignUp() {
                                             {validationMessages.address}
                                         </div>
                                         <div>
-                                            <button className="btn btn-main-md m-3" onClick={goSignUp}
+                                            <button className="btn btn-primary m-3" onClick={goSignUp}
                                                     type="button">Sign Up
                                             </button>
-                                            <button className="btn btn-main-md" onClick={() => navigate("/")}
+                                            <button className="btn btn-primary" onClick={() => navigate("/")}
                                                     type="button">Cancel
                                             </button>
                                         </div>

@@ -8,11 +8,12 @@ import Store from "./pages/store/store";
 import MyPage from "./pages/login/myPage";
 import SignIn from "./pages/login/signIn";
 import HabitCheck from "./pages/mySignal/habitCheck";
-import NoticeList from "./pages/customer/notice/list";
-import NoticeView from "./pages/customer/notice/view";
-import QnaList from "./pages/customer/qna/list";
-import QnaView from "./pages/customer/qna/view";
-import UserAdd from "./pages/customer/qna/userAdd";
+import QnaList from "./pages/qna/list";
+import QnaView from "./pages/qna/view";
+import UserAdd from "./pages/qna/userAdd";
+import AdminUpdate from "./pages/qna/adminUpdate";
+import AdminAdd from "./pages/qna/adminAdd";
+import Reserve from "./pages/planner/reserve";
 
 function App() {
 
@@ -29,12 +30,13 @@ function App() {
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/store" element={<Store/>}/>
                 <Route path="/mypage" element={<MyPage/>}/>
+                <Route path="/reserve" element={<Reserve/>}/>
                 <Route path="/habitcheck" element={<HabitCheck/>}/>
-                <Route path="/notice/list" element={<NoticeList/>}/>
-                <Route path="/notice/view/:ntcNo" element={<NoticeView/>}/>
                 <Route path="/qna/list" element={<QnaList/>} />
-                <Route path="/qna/view" element={<QnaView/>} />
+                <Route path="/qna/view/:queNo" element={<QnaView/>} />
                 <Route path="/qna/user/add" element={<UserAdd/>} />
+                <Route path="/qna/admin/add" element={<AdminAdd/>} />
+                <Route path="/qna/admin/update" element={<AdminUpdate/>} />
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
 

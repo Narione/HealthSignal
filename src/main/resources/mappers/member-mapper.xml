@@ -27,10 +27,10 @@
     <insert id="insertUser" parameterType="userVO">
         INSERT INTO USER
             (USER_ID, USER_PW, USER_NAME, USER_NICKNAME, USER_GENDER,
-            USER_BIRTH, USER_EMAIL, USER_ADDRESS, USER_PHOTO)
+            USER_BIRTH, USER_EMAIL, USER_ADDRESS,USER_CITY, USER_PHOTO)
         VALUES
             (#{userId}, #{userPw}, #{userName}, #{userNickname}, #{userGender},
-            #{userBirth}, #{userEmail}, #{userAddress}, #{userPhoto})
+            #{userBirth}, #{userEmail}, #{userAddress}, #{userCity}, #{userPhoto})
     </insert>
     <!--세션에 저장되있는 유저 정보-->
     <select id="getUserInfo" parameterType="int" resultType="userVO">

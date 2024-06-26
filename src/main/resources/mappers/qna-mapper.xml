@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.healthsignal.qna.QnaMapper">
+
+    <!--질문 목록 가져오기-->
+    <select id="selectQuestionList" resultType="questionVO">
+        SELECT
+            QUE_NO,
+            USER_NO,
+            QUE_TITLE,
+            QUE_CONTENT,
+            QUE_DEL,
+            QUE_ANSWER,
+            QUE_PUBLIC,
+            QUE_CRE_DATE
+        FROM
+            QUESTION
+        WHERE
+            QUE_DEL = 'N'
+        ORDER BY
+            QUE_CRE_DATE DESC
+    </select>
+
+    <!--질문 글 가져오기-->
+    <select id="selectQuestion" parameterType="int" resultType="questionVO">
+        SELECT
+            QUE_NO,
+            USER_NO,
+            QUE_TITLE,
+            QUE_CONTENT,
+            QUE_DEL,
+            QUE_ANSWER,
+            QUE_PUBLIC,
+            QUE_CRE_DATE
+        FROM
+            QUESTION
+        WHERE
+            QUE_NO = #{queNo}
+    </select>
+
+</mapper>

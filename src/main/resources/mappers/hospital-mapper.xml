@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.healthsignal.hospital.HospitalMapper">
+    <!-- 이용자의 지역과 같은 주소의 병원 목록 -->
+    <select id="getHospitalList" parameterType="hospitalVO" resultType="hospitalVO">
+        SELECT
+            HOS_NAME,
+            HOS_CATEGORY,
+            HOS_CITY,
+            HOS_ADDRESS,
+            HOS_PHONE,
+            HOS_URL
+        FROM
+            HOSPITAL
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="hosCity != null and hosCity != ''">
+                    AND HOS_CITY = #{hosCity}
+                </if>
+                <if test="hosFind != ''">
+                    AND HOS_NAME LIKE CONCAT('%', #{hosFind}, '%')
+                </if>
+                <!-- 필요한 다른 조건들을 추가 -->
+            </trim>
+        </where>
+        ORDER BY
+            HOS_NO
+        LIMIT
+            #{visibleCount}
+    </select>
+
+    <!-- 이용자의 지역과 같은 주소의 병원 수 -->
+    <select id="getHospitalCnt" parameterType="hospitalVO" resultType="int">
+        SELECT
+            COUNT(HOS_NO)
+        FROM
+            HOSPITAL
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="hosCity != null and hosCity != ''">
+                    AND HOS_CITY = #{hosCity}
+                </if>
+                <if test="hosFind != ''">
+                    AND HOS_NAME LIKE CONCAT('%', #{hosFind}, '%')
+                </if>
+                <!-- 필요한 다른 조건들을 추가 -->
+            </trim>
+        </where>
+    </select>
+
+</mapper>

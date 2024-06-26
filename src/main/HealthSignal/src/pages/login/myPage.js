@@ -35,7 +35,7 @@ const MyPage = () => {
 
 
     const [changeProfileFlag, setChangeProfileFlag] = useState(false);
-    const [userPreview, setUserPreview] = useState("");
+    const [userPreview, setUserPreview] = useState("/images/profile/" + "white.png");
 
     const [passwordConfirmFlag, setPasswordConfirmFlag] = useState(true);
     const [currentPasswordFlag, setCurrentPasswordFlag] = useState(true);
@@ -86,11 +86,20 @@ const MyPage = () => {
             setUserLikeTime(userInfo.userLiketime);
             setUserLikeActivity(userInfo.userLikeactivity);
             setUserMessage(userInfo.userMessage);
+            if (userInfo.userPhoto == null) {
+                if (userInfo.userGender === "m") {
+                    setUserPreview("/images/profile/male.jpg");
+                } else {
+                    setUserPreview("/images/profile/female.jpg");
+                }
+            } else {
+                setUserPreview("/images/profile/" + userInfo.userPhoto);
+            }
             setUserPhoto(userInfo.userPhoto);
             setUserGender(userInfo.userGender);
 
             if (userInfo.userPhoto) {
-                setUserPreview("/images/profile/" + userInfo.userPhoto);
+
             }
         }
 
@@ -234,18 +243,14 @@ const MyPage = () => {
                                     <div className="card-body">
                                         <div className="text-center">
                                             <img
-                                                src = {
-                                                     // 만약 userPhoto가 없으면 성별에 따라 기본 프로필 이미지 분기
-                                                    userPreview ? userPreview : userGender === "m" ? "/images/profile/male.jpg" : "/images/profile/female.jpg"
-                                                }
-                                                // src={userPreview}
+                                                src = {userPreview}
                                                 className="img-fluid rounded-circle align-content-center"
                                                 style={{width: '200px', height: '200px', border: 'solid 1px'}}
                                                 alt="profile"
                                             />
 
-                                            <div className="d-grid mt-3 text-center">
-                                                <button className="btn btn-outline-primary" type="button"
+                                            <div className="mt-3 text-center">
+                                                <button type="button" className="btn btn-outline-primary"
                                                         onClick={goClickUpload}>수정
                                                 </button>
                                             </div>

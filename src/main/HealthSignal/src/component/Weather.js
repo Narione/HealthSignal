@@ -64,7 +64,7 @@ const WeatherComponent = () => {
     return (
         <div className="weather-component">
             <img  src={weatherData.icon} alt="Weather Icon"  />
-            <p style={{fontSize: "10px"}}>{weatherData.temp} / {weatherData.hum}</p>
+            <p style={{fontSize: "15px"}}>{weatherData.temp} / {weatherData.hum}</p>
         </div>
     );
 };

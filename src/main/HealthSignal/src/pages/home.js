@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 export default function Home() {
     const [index, setIndex] = useState(0);
     const slideInterval = 1800; // Slide transition interval in milliseconds
@@ -21,13 +22,14 @@ export default function Home() {
 
     return (
         <div className="body-wrapper">
+
             <Carousel activeIndex={index} onSelect={handleSelect} interval={null} fade={true}>
                 <Carousel.Item>
                     <img
                         className="d-block w-100"
                         src="/images/assets/G1.png"
                         alt="First slide"
-                        style={{ height: 700, objectFit: 'cover' }}
+                        style={{height: 700, objectFit: 'cover'}}
                     />
                 </Carousel.Item>
 
@@ -36,7 +38,7 @@ export default function Home() {
                         className="d-block w-100"
                         src="/images/assets/K6.png"
                         alt="Second slide"
-                        style={{ height: 700, objectFit: 'cover' }}
+                        style={{height: 700, objectFit: 'cover'}}
                     />
                 </Carousel.Item>
                 <Carousel.Item>
@@ -44,11 +46,10 @@ export default function Home() {
                         className="d-block w-100"
                         src="/images/assets/K5.png"
                         alt="Third slide"
-                        style={{ height: 700, objectFit: 'cover' }}
+                        style={{height: 700, objectFit: 'cover'}}
                     />
                 </Carousel.Item>
             </Carousel>
-
 
             <div className="container mt-5">
                 <div className="row align-items-center">
@@ -85,6 +86,9 @@ export default function Home() {
                 </div>
             </section>
 
+
+
+
             <section className="service section bg-gray">
                 <div className="container-fluid p-0">
                     <div className="row">
@@ -99,7 +103,7 @@ export default function Home() {
                         <div className="col-lg-6 align-self-center">
 
                             <div className="service-thumb left ">
-                                <img className="img-fluid" src="images/feature/iphone-ipad.jpg" alt="iphone-ipad"  />
+                                <img className="img-fluid" src="images/feature/iphone-ipad.jpg" alt="iphone-ipad"/>
                             </div>
                         </div>
                         <div className="col-lg-5 mr-auto align-self-center">
@@ -229,5 +233,18 @@ export default function Home() {
             <div className="scroll-top-to">
                 <i className="ti-angle-up"></i>
             </div>
+
+            <script src="plugins/jquery/jquery.min.js"></script>
+            <script src="plugins/bootstrap/bootstrap.min.js"></script>
+            <script src="plugins/slick/slick.min.js"></script>
+            <script src="plugins/fancybox/jquery.fancybox.min.js"></script>
+            <script src="plugins/syotimer/jquery.syotimer.min.js"></script>
+            <script src="plugins/aos/aos.js"></script>
+            <script
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g"></script>
+            <script src="plugins/google-map/gmap.js"></script>
+
+            <script src="js/script.js"></script>
         </div>
-    );}
+    );
+}

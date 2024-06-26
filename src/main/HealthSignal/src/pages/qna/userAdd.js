@@ -103,7 +103,7 @@ const UserAdd = () => {
                               <div style={{padding:'10px'}}>
                                   <textarea className="form-control"
                                             rows="15"
-                                            style={{width:"100%"}}
+                                            style={{width:"100%", resize:"none"}}
                                   ></textarea>
                               </div>
                       </td>
@@ -111,6 +111,9 @@ const UserAdd = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div style={{margin:'10px', textAlign:'right'}}>
+            <button type="button" className="btn btn-primary">글 등록</button>
             </div>
           </div>
         </div>
