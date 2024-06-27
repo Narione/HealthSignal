@@ -7,16 +7,17 @@
     <!--질문 목록 가져오기-->
     <select id="selectQuestionList" resultType="questionVO">
         SELECT
-            QUE_NO,
-            USER_NO,
-            QUE_TITLE,
-            QUE_CONTENT,
-            QUE_DEL,
-            QUE_ANSWER,
-            QUE_PUBLIC,
-            QUE_CRE_DATE
+            A.QUE_NO,
+            B.USER_NICKNAME USER_NO,
+            A.QUE_TITLE,
+            A.QUE_CONTENT,
+            A.QUE_DEL,
+            A.QUE_ANSWER,
+            A.QUE_PUBLIC,
+            A.QUE_CRE_DATE
         FROM
-            QUESTION
+            QUESTION A
+            LEFT OUTER JOIN USER B ON A.USER_NO = B.USER_NO
         WHERE
             QUE_DEL = 'N'
         ORDER BY
@@ -26,18 +27,57 @@
     <!--질문 글 가져오기-->
     <select id="selectQuestion" parameterType="int" resultType="questionVO">
         SELECT
-            QUE_NO,
-            USER_NO,
-            QUE_TITLE,
-            QUE_CONTENT,
-            QUE_DEL,
-            QUE_ANSWER,
-            QUE_PUBLIC,
-            QUE_CRE_DATE
+            A.QUE_NO,
+            B.USER_NICKNAME USER_NO,
+            A.QUE_TITLE,
+            A.QUE_CONTENT,
+            A.QUE_DEL,
+            A.QUE_ANSWER,
+            A.QUE_PUBLIC,
+            A.QUE_CRE_DATE
         FROM
-            QUESTION
+            QUESTION A
+            LEFT OUTER JOIN USER B ON A.USER_NO = B.USER_NO
         WHERE
             QUE_NO = #{queNo}
     </select>
-
+    <!--질문글 작성하기-->
+    <insert id="insertQuestion" parameterType="questionVO">
+        INSERT INTO QUESTION
+            (USER_NO, QUE_TITLE, QUE_CONTENT, QUE_PUBLIC)
+        VALUES
+            (#{userNo}, #{queTitle}, #{queContent}, #{quePublic})
+    </insert>
+    <!--질문글 삭제하기-->
+    <update id="deleteQuestion" parameterType="int">
+        UPDATE
+            QUESTION
+        SET
+            QUE_DEL = 'Y'
+        WHERE
+            QUE_NO = #{queNo}
+    </update>
+    <!--답변 글 가져오기-->
+    <select id="selectAnswer" parameterType="int" resultType="answerVO">
+        select
+            ans_no,
+            que_no,
+            ans_title,
+            ans_content,
+            ans_del,
+            ans_cre_date,
+            ans_mod_date
+        from
+            answer
+        where
+            que_no=#{queNo}
+    </select>
+    <!--답변 글 작성하기-->
+<!--    <insert id="insertAnswer" parameterType="answerVO">-->
+<!--        insert into-->
+<!--        answer-->
+<!--        (que_no,ans_title,ans_content)-->
+<!--        values-->
+<!--            (1,'답변1','답변1답변')-->
+<!--    </insert>-->
 </mapper>

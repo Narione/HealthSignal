@@ -8,4 +8,7 @@ import java.util.List;
 public interface QnaMapper {
     List<QuestionVO> selectQuestionList();
     QuestionVO selectQuestion(int queNo);
+    int insertQuestion(QuestionVO questionVO);
+    int deleteQuestion(int queNo);
+    AnswerVO selectAnswer(int queNo);
 }

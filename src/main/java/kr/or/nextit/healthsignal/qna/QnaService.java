@@ -17,4 +17,17 @@ public class QnaService {
     public QuestionVO selectQuestion(int queNo){
         return qnaMapper.selectQuestion(queNo);
     }
+
+    public int insertQuestion(QuestionVO questionVO){
+        return qnaMapper.insertQuestion(questionVO);
+    }
+
+    public int deleteQuestion(int queNo){
+        return qnaMapper.deleteQuestion(queNo);
+    }
+
+    public AnswerVO selectAnswer(int queNo){
+        return qnaMapper.selectAnswer(queNo);
+    }
+
 }

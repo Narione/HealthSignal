@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class QuestionVO {
     private int queNo;
-    private int userNo;
+    private String userNo;
     private String queTitle;
     private String queContent;
     private String queDel;

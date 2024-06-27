@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import moment from 'moment';
 
 const QnaList = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const QnaList = () => {
     try {
       const res = await axios.get("/api/question/list");
       setQuestionList(res.data);
+      console.log(res.data);
     }catch(err) {
       console.error(err);
     }
@@ -27,8 +29,8 @@ const QnaList = () => {
           </div>
         </div>
         <div className="bg-gray d-flex justify-content-center p-3 mb-3">
-          <select className="form-select" style={{width:"10%"}}>
-            <option selected>선택</option>
+          <select className="form-select" defaultValue="default" style={{width:"10%"}}>
+            <option value="default">선택</option>
             <option value="title">제목</option>
             <option value="id">아이디</option>
           </select>
@@ -59,7 +61,7 @@ const QnaList = () => {
                           <td className="align-middle">
                             <div className="d-flex align-items-center">
                               <div className="ms-3 lh-1">
-                                <img src="/images/qna/icon-closed-padlock.png" />
+                                {v.quePublic == "N" ? <img src="/images/qna/icon-closed-padlock.png"/> : null}
                                 <a className="text-inherit text-black text-decoration-none" onClick={() => {
                                   navigate(`/qna/view/${v.queNo}`)
                                 }}>
@@ -72,7 +74,7 @@ const QnaList = () => {
                             <span>{v.userNo}</span>
                           </td>
                           <td className="align-middle text-center">
-                            <span>{v.queCreDate}</span>
+                            <span>{moment(v.queCreDate).format('YYYY-MM-DD')}</span>
                           </td>
                           <td className="align-middle text-center">
                             <span>답변대기</span>
@@ -86,6 +88,7 @@ const QnaList = () => {
             <div className="col-12 text-right">
               <button
                   className="btn btn-primary mt-2"
+                  onClick={()=>{navigate("/qna/user/add")}}
               >
                 글 작성
               </button>

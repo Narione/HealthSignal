@@ -1,9 +1,59 @@
-import React, { useEffect } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const UserAdd = () => {
 
+  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({});
+
+  //글요소
+  const [title, setTitle] = useState("");
+  const [publicYN, setPublicYN] = useState("Y");
+  const [content, setContent] = useState("");
+
+
+
+  //핸들러
+  const titleOnChangeHandler = useCallback((e)=>{
+    setTitle(e.target.value);
+  },[])
+
+  const publicOnChangeHandler = useCallback((e)=>{
+    setPublicYN(e.target.value);
+  },[])
+
+  const contentOnChangeHandler = useCallback((e)=>{
+    setContent(e.target.value);
+  },[])
+
+  useEffect(() => {
+    // 서버에서 데이터를 가져오는 비동기 함수
+    getUserInfo();
+  }, []);
+
+  // 로그인 정보 불러오기
+  const getUserInfo = async () => {
+    await axios.post("/api/getuserinfo").then((res) => {
+      setUserInfo(res.data);
+      console.log("세션정보", res.data);
+    });
+  };
+
+  // 질문글 추가하기
+  const goAddQuestion=async ()=>{
+    await axios.post("/api/question/add",{
+      userNo: userInfo.userNo,
+      queTitle:title,
+      queContent:content,
+      quePublic:publicYN
+    }).then((res) => {
+      console.log("adding result: ",res.data);
+      if(res.data === 1){
+        navigate("/qna/list")
+      }
+    })
+  }
 
   return (
     <>
@@ -31,7 +81,7 @@ const UserAdd = () => {
                         <div style={{ fontWeight: "normal" }}>제목</div>
                       </th>
                       <th colSpan="3" className="align-middle bg-white">
-                        <input className="form-control" type="text" />
+                        <input className="form-control" type="text" onChange={titleOnChangeHandler}/>
                       </th>
                     </tr>
                     <tr>
@@ -56,7 +106,8 @@ const UserAdd = () => {
                               id="public"
                               name="publicFlag"
                               value="Y"
-                              // onChange={genderOnChangeHandler}
+                              checked
+                              onChange={publicOnChangeHandler}
                             />{" "}
                             공개
                           </label>
@@ -68,7 +119,7 @@ const UserAdd = () => {
                               id="private"
                               name="publicFlag"
                               value="N"
-                              // onChange={genderOnChangeHandler}
+                              onChange={publicOnChangeHandler}
                             />{" "}
                             비공개
                           </label>
@@ -104,6 +155,7 @@ const UserAdd = () => {
                                   <textarea className="form-control"
                                             rows="15"
                                             style={{width:"100%", resize:"none"}}
+                                            onChange={contentOnChangeHandler}
                                   ></textarea>
                               </div>
                       </td>
@@ -113,7 +165,7 @@ const UserAdd = () => {
               </div>
             </div>
             <div style={{margin:'10px', textAlign:'right'}}>
-            <button type="button" className="btn btn-primary">글 등록</button>
+            <button type="button" className="btn btn-primary" onClick={goAddQuestion}>글 등록</button>
             </div>
           </div>
         </div>

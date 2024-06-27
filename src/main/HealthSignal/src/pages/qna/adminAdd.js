@@ -1,6 +1,10 @@
 import React from 'react';
+import {useParams} from "react-router-dom";
 
 const AdminAdd = () => {
+    const { queNo } = useParams();
+
+
     return (
         <>
             <div className="container mt-5 mb-5">

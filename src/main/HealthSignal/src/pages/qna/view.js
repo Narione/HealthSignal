@@ -1,24 +1,50 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import moment from "moment/moment";
 
 const QnaView = () => {
   const { queNo } = useParams();
   const [question, setQuestion] = React.useState(null);
+  const [answer, setAnswer] = React.useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getQuestionView();
   }, []);
 
+  useEffect(()=>{
+    if(question!=null){
+    getAnswerView();
+    }
+  },[question])
+
   const getQuestionView = async () => {
     try {
       const res = await axios.get(`/api/question/view?queNo=${queNo}`);
-      console.log(res.data);
       setQuestion(res.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const deleteQuestion = async () => {
+    await axios.get(`/api/question/delete?queNo=${queNo}`).then((res) => {
+      if(res.data===1){
+        navigate("/qna/list");
+      }
+    })
+  }
+
+  const getAnswerView = async () => {
+    try{
+      const res = await axios.get(`/api/answer/view?queNo=${queNo}`);
+      setAnswer(res.data);
+    }catch (err){
+      console.error(err);
+    }
+  }
 
   return (
     <>
@@ -76,7 +102,7 @@ const QnaView = () => {
                         className="align-middle bg-white"
                         style={{ width: "35%", fontWeight: "normal" }}
                       >
-                        {question?question.queCreDate:null}
+                        {question?moment(question.queCreDate).format('YYYY-MM-DD HH:mm'):null}
                       </th>
                     </tr>
                   </thead>
@@ -103,7 +129,7 @@ const QnaView = () => {
           </div>
         </div>
 
-        <div className="row answer mt-4">
+        {answer?(<div className="row answer mt-4">
           <div className="col-md-12 col-12">
             <div className="card">
               <div className="table-responsive">
@@ -116,10 +142,10 @@ const QnaView = () => {
                             src="/images/qna/icon-letter-a.png"
                             style={{ width: "50px", height: "50px" }}
                           />{" "}
-                          제목
+                          {answer?answer.ansTitle:null}
                         </div>
                       </th>
-                        <th style={{width:"20%", verticalAlign:"middle", fontWeight:"normal"}}>2024.06.26 11:41</th>
+                        <th style={{width:"20%", verticalAlign:"middle", fontWeight:"normal"}}>{answer?moment(answer.ansCreDate).format('YYYY-MM-DD HH:mm'):null}</th>
                     </tr>
                   </thead>
                     <tbody>
@@ -135,7 +161,7 @@ const QnaView = () => {
                         }}
                         colSpan="2"
                     >
-                      내용
+                      {answer?answer.ansContent:null}
                     </td>
                   </tr>
                   </tbody>
@@ -143,12 +169,12 @@ const QnaView = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>):null}
         <div className="container text-right mt-3">
-          <button className="btn btn-primary">목록</button>
-          <button className="btn btn-secondary ml-2">답변하기</button>
+          <button className="btn btn-primary" onClick={()=>{navigate(-1)}}>목록</button>
+          <button className="btn btn-secondary ml-2" onClick={()=>{navigate(`/qna/admin/add/${queNo}`)}}>답변하기</button>
           <button className="btn btn-secondary ml-2">답변수정</button>
-          <button className="btn btn-danger ml-2">삭제</button>
+          <button className="btn btn-danger ml-2" onClick={deleteQuestion}>삭제</button>
         </div>
       </div>
     </>

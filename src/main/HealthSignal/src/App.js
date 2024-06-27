@@ -35,7 +35,7 @@ function App() {
                 <Route path="/qna/list" element={<QnaList/>} />
                 <Route path="/qna/view/:queNo" element={<QnaView/>} />
                 <Route path="/qna/user/add" element={<UserAdd/>} />
-                <Route path="/qna/admin/add" element={<AdminAdd/>} />
+                <Route path="/qna/admin/add/:queNo" element={<AdminAdd/>} />
                 <Route path="/qna/admin/update" element={<AdminUpdate/>} />
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
