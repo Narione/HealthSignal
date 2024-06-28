@@ -11,4 +11,7 @@ public interface QnaMapper {
     int insertQuestion(QuestionVO questionVO);
     int deleteQuestion(int queNo);
     AnswerVO selectAnswer(int queNo);
+    int insertAnswer(AnswerVO answerVO);
+    int updateQueAnswer(AnswerVO answerVO);
+    QuestionVO getUserNoByQueNo(int queNo);
 }

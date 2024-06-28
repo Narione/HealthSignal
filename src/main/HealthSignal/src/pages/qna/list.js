@@ -14,11 +14,12 @@ const QnaList = () => {
     try {
       const res = await axios.get("/api/question/list");
       setQuestionList(res.data);
-      console.log(res.data);
     }catch(err) {
       console.error(err);
     }
   }
+
+
 
   return (
     <>
@@ -62,7 +63,8 @@ const QnaList = () => {
                             <div className="d-flex align-items-center">
                               <div className="ms-3 lh-1">
                                 {v.quePublic == "N" ? <img src="/images/qna/icon-closed-padlock.png"/> : null}
-                                <a className="text-inherit text-black text-decoration-none" onClick={() => {
+                                <a className="text-inherit text-black text-decoration-none"
+                                   onClick={() => {
                                   navigate(`/qna/view/${v.queNo}`)
                                 }}>
                                   {v.queTitle}
@@ -77,7 +79,7 @@ const QnaList = () => {
                             <span>{moment(v.queCreDate).format('YYYY-MM-DD')}</span>
                           </td>
                           <td className="align-middle text-center">
-                            <span>답변대기</span>
+                            {v.queAnswer == "Y" ? <span style={{color:"blue"}}>답변완료</span> : <span>답변대기</span>}
                           </td>
                         </tr>);
                   })}

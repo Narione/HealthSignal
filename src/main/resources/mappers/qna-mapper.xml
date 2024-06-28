@@ -73,11 +73,29 @@
             que_no=#{queNo}
     </select>
     <!--답변 글 작성하기-->
-<!--    <insert id="insertAnswer" parameterType="answerVO">-->
-<!--        insert into-->
-<!--        answer-->
-<!--        (que_no,ans_title,ans_content)-->
-<!--        values-->
-<!--            (1,'답변1','답변1답변')-->
-<!--    </insert>-->
+    <insert id="insertAnswer" parameterType="answerVO">
+        INSERT INTO
+            ANSWER
+            (que_no,ans_title,ans_content)
+        VALUES
+            (#{queNo},#{ansTitle},#{ansContent})
+    </insert>
+    <!--답변완료 여부 업데이트-->
+    <update id="updateQueAnswer" parameterType="answerVO">
+        update
+            question
+        set
+            que_answer = 'Y'
+        where
+            que_no = #{queNo}
+    </update>
+    <!--비밀글 유저정보 체크-->
+    <select id="getUserNoByQueNo" parameterType="int" resultType="questionVO">
+        SELECT
+            USER_NO, QUE_PUBLIC
+        FROM
+            QUESTION
+        WHERE
+            QUE_NO = #{queNo}
+    </select>
 </mapper>

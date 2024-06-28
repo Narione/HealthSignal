@@ -5,14 +5,27 @@ import moment from "moment/moment";
 
 const QnaView = () => {
   const { queNo } = useParams();
+  const [userInfo, setUserInfo] = useState({});
   const [question, setQuestion] = React.useState(null);
   const [answer, setAnswer] = React.useState(null);
+  const [privateInfo, setPrivateInfo] = React.useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getQuestionView();
+    getUserInfo();
+    getPrivateInfo();
   }, []);
+
+  useEffect(() => {
+    if (privateInfo.quePublic !== null){
+      if (privateInfo.quePublic === "Y") {
+        getQuestionView();
+      } else {
+        alert("비밀글입니다.");
+      }
+  }
+  }, [privateInfo]);
 
   useEffect(()=>{
     if(question!=null){
@@ -20,13 +33,35 @@ const QnaView = () => {
     }
   },[question])
 
+  /* 각종함수 */
+
+  const getUserInfo = async () => {
+    await axios.post("api/getuserinfo").then((res) => {
+      setUserInfo(res.data);
+      console.log("세션정보", res.data);
+    });
+  };
+
+  const getPrivateInfo = async () => {
+    try{
+      const res = await axios.get(`/api/qna/private?queNo=${queNo}`);
+      setPrivateInfo(res.data);
+    }catch(error){
+      console.error("Error selecting data:", error);
+    }
+  }
+
   const getQuestionView = async () => {
+
+
     try {
       const res = await axios.get(`/api/question/view?queNo=${queNo}`);
       setQuestion(res.data);
     } catch (error) {
       console.error(error);
     }
+
+
   };
 
   const deleteQuestion = async () => {
@@ -34,6 +69,8 @@ const QnaView = () => {
       if(res.data===1){
         navigate("/qna/list");
       }
+    }).catch((err) => {
+      console.error(err);
     })
   }
 
@@ -171,7 +208,7 @@ const QnaView = () => {
           </div>
         </div>):null}
         <div className="container text-right mt-3">
-          <button className="btn btn-primary" onClick={()=>{navigate(-1)}}>목록</button>
+          <button className="btn btn-primary" onClick={()=>{navigate("/qna/list")}}>목록</button>
           <button className="btn btn-secondary ml-2" onClick={()=>{navigate(`/qna/admin/add/${queNo}`)}}>답변하기</button>
           <button className="btn btn-secondary ml-2">답변수정</button>
           <button className="btn btn-danger ml-2" onClick={deleteQuestion}>삭제</button>

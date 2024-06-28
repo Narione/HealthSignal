@@ -42,4 +42,16 @@ public class QnaController {
         AnswerVO answerVO = qnaService.selectAnswer(queNo);
         return ResponseEntity.ok(answerVO);
     }
+
+    @PostMapping("/answer/add")
+    public int insertAnswer(@RequestBody AnswerVO answerVO){
+        int result = qnaService.insertAnswer(answerVO);
+        return result;
+    }
+
+    @GetMapping("/qna/private")
+    public ResponseEntity<QuestionVO> getUserNoByQueId(@RequestParam("queNo") int queNo){
+        QuestionVO questionVO = qnaService.getUserNoByQueNo(queNo);
+        return ResponseEntity.ok(questionVO);
+    }
 }

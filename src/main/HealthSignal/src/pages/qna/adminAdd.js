@@ -1,9 +1,37 @@
-import React from 'react';
-import {useParams} from "react-router-dom";
+import React, {useCallback} from 'react';
+import {useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
 
 const AdminAdd = () => {
     const { queNo } = useParams();
+    const navigate = useNavigate();
 
+    const [ansTitle, setAnsTitle] = React.useState('');
+    const [ansContent, setAnsContent] = React.useState('');
+
+    const titleOnChangeHandler = useCallback((e)=>{
+        setAnsTitle(e.target.value);
+    })
+
+    const contentOnChangeHandler = useCallback((e)=>{
+        setAnsContent(e.target.value);
+    })
+
+    const addAnswer = async () => {
+        try{
+            const res= await axios.post("/api/answer/add", {
+                queNo: queNo,
+                ansTitle: ansTitle,
+                ansContent: ansContent
+            })
+            console.log(res.data)
+            if(res.data === 1){
+                navigate(`/qna/view/${queNo}`)
+            }
+        }catch (err){
+            console.error("Error adding data:", err);
+        }
+    }
 
     return (
         <>
@@ -31,7 +59,7 @@ const AdminAdd = () => {
                                             <div style={{ fontWeight: "normal" }}>제목</div>
                                         </th>
                                         <th className="align-middle bg-white">
-                                            <input className="form-control" type="text" />
+                                            <input className="form-control" type="text" onChange={titleOnChangeHandler}/>
                                         </th>
                                     </tr>
                                     <tr>
@@ -66,6 +94,7 @@ const AdminAdd = () => {
                                 className="form-control"
                                 rows="15"
                                 style={{ width: "100%", resize: "none" }}
+                                onChange={contentOnChangeHandler}
                             ></textarea>
                                             </div>
                                         </td>
@@ -75,7 +104,9 @@ const AdminAdd = () => {
                             </div>
                         </div>
                         <div style={{ margin: "10px", textAlign: "right" }}>
-                            <button type="button" className="btn btn-primary">
+                            <button type="button" className="btn btn-primary"
+                                    onClick={addAnswer}
+                            >
                                 답변 등록
                             </button>
                         </div>
