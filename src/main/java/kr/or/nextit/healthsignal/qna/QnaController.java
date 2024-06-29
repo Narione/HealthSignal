@@ -14,8 +14,8 @@ public class QnaController {
     private final QnaService qnaService;
 
     @GetMapping("/question/list")
-    public ResponseEntity<List<QuestionVO>> selectQuestionList() {
-        List<QuestionVO> questionList = qnaService.selectQuestionList();
+    public ResponseEntity<List<QuestionVO>> selectQuestionList(@RequestBody QuestionVO questionVO) {
+        List<QuestionVO> questionList = qnaService.selectQuestionList(questionVO);
         return ResponseEntity.ok(questionList);
     }
 

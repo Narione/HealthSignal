@@ -4,39 +4,54 @@ import {useNavigate, useParams} from "react-router-dom";
 import moment from "moment/moment";
 
 const QnaView = () => {
+  const navigate = useNavigate();
+
   const { queNo } = useParams();
   const [userInfo, setUserInfo] = useState({});
   const [question, setQuestion] = React.useState(null);
   const [answer, setAnswer] = React.useState(null);
   const [privateInfo, setPrivateInfo] = React.useState(null);
+  //관리자여부
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     getUserInfo();
     getPrivateInfo();
   }, []);
 
+  //관리자 여부 설정
   useEffect(() => {
-    if (privateInfo.quePublic !== null){
-      if (privateInfo.quePublic === "Y") {
+    if(userInfo!=null){
+      if(userInfo.userId == "admin"){
+        setIsAdmin(true);
+      }
+    }
+  }, [userInfo]);
+
+  //비밀글 불러오기
+  useEffect(() => {
+    if (privateInfo != null) {
+      if (privateInfo.quePublic === "Y"||privateInfo.userNo == userInfo.userNo||userInfo.userId === "admin") {
         getQuestionView();
       } else {
         alert("비밀글입니다.");
+        navigate("/qna/list")
       }
-  }
+    }
   }, [privateInfo]);
 
+  //답변글 불러오기
   useEffect(()=>{
     if(question!=null){
     getAnswerView();
     }
   },[question])
 
-  /* 각종함수 */
 
+  /* 각종함수 */
   const getUserInfo = async () => {
-    await axios.post("api/getuserinfo").then((res) => {
+    await axios.post("/api/getuserinfo").then((res) => {
       setUserInfo(res.data);
       console.log("세션정보", res.data);
     });
@@ -82,6 +97,13 @@ const QnaView = () => {
       console.error(err);
     }
   }
+
+
+
+
+
+
+
 
   return (
     <>
@@ -209,8 +231,8 @@ const QnaView = () => {
         </div>):null}
         <div className="container text-right mt-3">
           <button className="btn btn-primary" onClick={()=>{navigate("/qna/list")}}>목록</button>
-          <button className="btn btn-secondary ml-2" onClick={()=>{navigate(`/qna/admin/add/${queNo}`)}}>답변하기</button>
-          <button className="btn btn-secondary ml-2">답변수정</button>
+          {isAdmin?(<><button className="btn btn-secondary ml-2" onClick={()=>{navigate(`/qna/admin/add/${queNo}`)}}>답변하기</button>
+              <button className="btn btn-secondary ml-2">답변수정</button></>):null}
           <button className="btn btn-danger ml-2" onClick={deleteQuestion}>삭제</button>
         </div>
       </div>

@@ -5,7 +5,7 @@
 <mapper namespace="kr.or.nextit.healthsignal.qna.QnaMapper">
 
     <!--질문 목록 가져오기-->
-    <select id="selectQuestionList" resultType="questionVO">
+    <select id="selectQuestionList" parameterType="questionVO" resultType="questionVO">
         SELECT
             A.QUE_NO,
             B.USER_NICKNAME USER_NO,
@@ -22,6 +22,10 @@
             QUE_DEL = 'N'
         ORDER BY
             QUE_CRE_DATE DESC
+        LIMIT
+            #{pageSize}
+        OFFSET
+            #{currentPage}
     </select>
 
     <!--질문 글 가져오기-->
@@ -97,5 +101,14 @@
             QUESTION
         WHERE
             QUE_NO = #{queNo}
+    </select>
+
+    <!--페이지네이션 -->
+    <!--문의글 총 개수 출력-->
+    <select id="selectQueCount" resultType="int">
+        SELECT
+            COUNT(QUE_NO)
+        FROM
+            QUESTION
     </select>
 </mapper>

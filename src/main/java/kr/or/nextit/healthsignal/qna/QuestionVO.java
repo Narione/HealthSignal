@@ -11,7 +11,9 @@ public class QuestionVO {
     private String queTitle;
     private String queContent;
     private String queDel;
-    public String queAnswer;
-    public String quePublic;
-    public LocalDateTime queCreDate;
+    private String queAnswer;
+    private String quePublic;
+    private LocalDateTime queCreDate;
+    private int currentPage;
+    private int pageSize;
 }

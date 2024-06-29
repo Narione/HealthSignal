@@ -6,7 +6,7 @@ import java.util.List;
 
 @Mapper
 public interface QnaMapper {
-    List<QuestionVO> selectQuestionList();
+    List<QuestionVO> selectQuestionList(QuestionVO questionVO);
     QuestionVO selectQuestion(int queNo);
     int insertQuestion(QuestionVO questionVO);
     int deleteQuestion(int queNo);

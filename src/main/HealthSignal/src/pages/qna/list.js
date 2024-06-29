@@ -6,18 +6,36 @@ import moment from 'moment';
 const QnaList = () => {
   const navigate = useNavigate();
   const [questionList, setQuestionList] = useState([]);
+
+  /* 페이지네이션 */
+  const pageSize = 5;
+  const pagePerGroup = 10;
+
+  const [pageGroup, setPageGroup] = useState([]);
+  const [currentPageGroup, setCurrentPageGroup] = useState(1);
+  const [queCount, setQueCount] = useState(0);
+  const [queList, setQueList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
+
   useEffect(() => {
     getQuestionList();
   }, []);
   /* 리스트 불러오기 */
   const getQuestionList = async() => {
     try {
-      const res = await axios.get("/api/question/list");
+      const res = await axios.post("/api/question/list",{
+        pageSize: pageSize,
+        currentPage: currentPage
+      });
       setQuestionList(res.data);
     }catch(err) {
       console.error(err);
     }
   }
+
+
 
 
 

@@ -11,8 +11,8 @@ import java.util.List;
 public class QnaService {
     public final QnaMapper qnaMapper;
 
-    public List<QuestionVO> selectQuestionList(){
-        return qnaMapper.selectQuestionList();
+    public List<QuestionVO> selectQuestionList(QuestionVO questionVO){
+        return qnaMapper.selectQuestionList(questionVO);
     }
 
     public QuestionVO selectQuestion(int queNo){
