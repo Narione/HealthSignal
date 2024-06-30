@@ -8,7 +8,8 @@
     <select id="selectQuestionList" parameterType="questionVO" resultType="questionVO">
         SELECT
             A.QUE_NO,
-            B.USER_NICKNAME USER_NO,
+            B.USER_NICKNAME,
+            B.USER_ID,
             A.QUE_TITLE,
             A.QUE_CONTENT,
             A.QUE_DEL,
@@ -18,8 +19,15 @@
         FROM
             QUESTION A
             LEFT OUTER JOIN USER B ON A.USER_NO = B.USER_NO
-        WHERE
-            QUE_DEL = 'N'
+        <where>
+            A.QUE_DEL = 'N'
+            <if test="searchType == 'title'">
+                and a.que_title like '%' || #{searchWord} || '%'
+            </if>
+            <if test="searchType == 'id'">
+                and b.user_id like '%' || #{searchWord} || '%'
+            </if>
+        </where>
         ORDER BY
             QUE_CRE_DATE DESC
         LIMIT
@@ -110,5 +118,12 @@
             COUNT(QUE_NO)
         FROM
             QUESTION
+        WHERE
+            QUE_DEL = 'N'
+    </select>
+    <!--검색기능-->
+    <select id="searchQuestions" parameterType="String" resultType="questionVO">
+        SELECT * FROM posts
+
     </select>
 </mapper>

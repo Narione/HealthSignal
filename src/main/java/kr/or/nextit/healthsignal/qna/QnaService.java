@@ -42,4 +42,8 @@ public class QnaService {
         return questionVO;
     }
 
+    public int selectQueCount(){
+        return qnaMapper.selectQueCount();
+    }
+
 }

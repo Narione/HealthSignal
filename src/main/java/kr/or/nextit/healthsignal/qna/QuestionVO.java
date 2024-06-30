@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public class QuestionVO {
     private int queNo;
     private String userNo;
+    private String userNickname;
+    private String userId;
     private String queTitle;
     private String queContent;
     private String queDel;
@@ -16,4 +18,6 @@ public class QuestionVO {
     private LocalDateTime queCreDate;
     private int currentPage;
     private int pageSize;
+    private String searchWord;
+    private String searchType;
 }

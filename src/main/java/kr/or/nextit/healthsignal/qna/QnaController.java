@@ -13,7 +13,7 @@ import java.util.List;
 public class QnaController {
     private final QnaService qnaService;
 
-    @GetMapping("/question/list")
+    @PostMapping("/question/list")
     public ResponseEntity<List<QuestionVO>> selectQuestionList(@RequestBody QuestionVO questionVO) {
         List<QuestionVO> questionList = qnaService.selectQuestionList(questionVO);
         return ResponseEntity.ok(questionList);
@@ -53,5 +53,11 @@ public class QnaController {
     public ResponseEntity<QuestionVO> getUserNoByQueId(@RequestParam("queNo") int queNo){
         QuestionVO questionVO = qnaService.getUserNoByQueNo(queNo);
         return ResponseEntity.ok(questionVO);
+    }
+
+    @GetMapping("/qna/count")
+    public int selectQueCount(){
+        int queCount = qnaService.selectQueCount();
+        return queCount;
     }
 }

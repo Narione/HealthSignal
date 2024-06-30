@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import moment from 'moment';
@@ -8,35 +8,94 @@ const QnaList = () => {
   const [questionList, setQuestionList] = useState([]);
 
   /* 페이지네이션 */
-  const pageSize = 5;
+  const pageSize = 10;
   const pagePerGroup = 10;
 
   const [pageGroup, setPageGroup] = useState([]);
   const [currentPageGroup, setCurrentPageGroup] = useState(1);
   const [queCount, setQueCount] = useState(0);
-  const [queList, setQueList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(0);
 
+  /* 검색 기능 */
+  const [searchType, setSearchType] = useState("default");
+  const [searchWord, setSearchWord] = useState("");
+
+  const searchTypeOnChangeHandler = useCallback((e)=>{
+    setSearchType(e.target.value);
+  },[])
+
+  const searchWordOnChangeHandler = useCallback((e)=>{
+    setSearchWord(e.target.value);
+  },[])
 
   useEffect(() => {
+    getQueCnt();
     getQuestionList();
   }, []);
-  /* 리스트 불러오기 */
-  const getQuestionList = async() => {
-    try {
-      const res = await axios.post("/api/question/list",{
-        pageSize: pageSize,
-        currentPage: currentPage
-      });
-      setQuestionList(res.data);
-    }catch(err) {
-      console.error(err);
-    }
+
+ /* 문의글 개수 불러오기 */
+  const getQueCnt = () => {
+    axios.get("/api/qna/count")
+        .then(res=>setQueCount(res.data));
   }
 
+  /* 리스트 불러오기 */
+  const getQuestionList = async() => {
+      await axios.post("/api/question/list",{
+        pageSize: pageSize,
+        currentPage: (currentPage - 1) * pageSize,
+        searchType: searchType,
+        searchWord: searchWord
+      }).then(res=>setQuestionList(res.data)).catch(err=>console.error(err))
+  }
 
+  const printConsole = () => {
+    console.log(searchType, searchWord)
+  }
 
+  useEffect(() => {
+    setTotalPageCount(Math.ceil(queCount / pageSize));
+    getQuestionList();
+  }, [queCount, currentPage]);
+
+  useEffect(() => {
+    MakePageGroup();
+  }, [currentPageGroup, totalPageCount]);
+
+  const MakePageGroup = () => {
+    const startPage = ((currentPageGroup - 1) * pagePerGroup) + 1;
+    const endPage = Math.min(currentPageGroup * pagePerGroup, totalPageCount);
+    const newPageGroup = [];
+
+    for (let i = startPage; i <= endPage; i++) {
+      newPageGroup.push(i);
+    }
+    setPageGroup(newPageGroup);
+  };
+
+  const goPreviousGroup = () => {
+    if (currentPageGroup > 1) {
+      setCurrentPageGroup(currentPageGroup - 1);
+      setCurrentPage((currentPageGroup - 2) * pagePerGroup + 1);
+    }
+  };
+
+  const goNextGroup = () => {
+    if (currentPageGroup * pagePerGroup < totalPageCount) {
+      setCurrentPageGroup(currentPageGroup + 1);
+      setCurrentPage(currentPageGroup * pagePerGroup + 1);
+    }
+  };
+
+  const goButtonPage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const goSearch= () => {
+    getQueCnt();
+    getQuestionList();
+  }
 
 
   return (
@@ -48,13 +107,16 @@ const QnaList = () => {
           </div>
         </div>
         <div className="bg-gray d-flex justify-content-center p-3 mb-3">
-          <select className="form-select" defaultValue="default" style={{width:"10%"}}>
+          <select className="form-select" defaultValue="default" style={{width:"10%"}}
+                  onChange={searchTypeOnChangeHandler}>
             <option value="default">선택</option>
             <option value="title">제목</option>
             <option value="id">아이디</option>
           </select>
-          <input type="text" className="form-control" style={{width:"30%"}}/>
-          <button className="btn btn-secondary" type="button">검색</button>
+          <input type="text" className="form-control" style={{width:"30%"}}
+                 onChange={searchWordOnChangeHandler}
+          />
+          <button className="btn btn-secondary" type="button" onClick={goSearch}>검색</button>
         </div>
         <div className="row">
           <div className="col-md-12 col-12">
@@ -83,21 +145,21 @@ const QnaList = () => {
                                 {v.quePublic == "N" ? <img src="/images/qna/icon-closed-padlock.png"/> : null}
                                 <a className="text-inherit text-black text-decoration-none"
                                    onClick={() => {
-                                  navigate(`/qna/view/${v.queNo}`)
-                                }}>
+                                     navigate(`/qna/view/${v.queNo}`)
+                                   }}>
                                   {v.queTitle}
                                 </a>
                               </div>
                             </div>
                           </td>
                           <td className="align-middle text-center">
-                            <span>{v.userNo}</span>
+                            <span>{v.userNickname}</span>
                           </td>
                           <td className="align-middle text-center">
                             <span>{moment(v.queCreDate).format('YYYY-MM-DD')}</span>
                           </td>
                           <td className="align-middle text-center">
-                            {v.queAnswer == "Y" ? <span style={{color:"blue"}}>답변완료</span> : <span>답변대기</span>}
+                            {v.queAnswer == "Y" ? <span style={{color: "blue"}}>답변완료</span> : <span>답변대기</span>}
                           </td>
                         </tr>);
                   })}
@@ -108,24 +170,39 @@ const QnaList = () => {
             <div className="col-12 text-right">
               <button
                   className="btn btn-primary mt-2"
-                  onClick={()=>{navigate("/qna/user/add")}}
+                  onClick={() => {
+                    navigate("/qna/user/add")
+                  }}
               >
                 글 작성
               </button>
             </div>
-            <nav aria-label="Page navigation example" className="mt-2">
-              <ul className="pagination justify-content-center">
-                <li className="page-item">
-                  <a className="page-link">Previous</a>
-                </li>
-                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                <li className="page-item">
-                  <a className="page-link" href="#">Next</a>
-                </li>
-              </ul>
-            </nav>
+            {/*페이징 버튼*/}
+            <div className="container">
+              <div className="row">
+                <div className="col">
+                  <ul className="pagination justify-content-center" style={{cursor: "pointer"}}>
+                    <li className="page-item">
+                      <a className="page-link" onClick={goPreviousGroup} href="#">Previous</a>
+                    </li>
+                    {
+                      pageGroup.map((v, i) => (
+                          <li
+                              className={`page-item ${currentPage === v ? 'active' : ''}`}
+                              key={i}
+                              onClick={() => goButtonPage(v)}
+                          >
+                            <a className="page-link" href="#">{v}</a>
+                          </li>
+                      ))
+                    }
+                    <li className="page-item">
+                      <a className="page-link" onClick={goNextGroup} href="#">Next</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

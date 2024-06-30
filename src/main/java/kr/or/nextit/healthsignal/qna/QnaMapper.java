@@ -14,4 +14,5 @@ public interface QnaMapper {
     int insertAnswer(AnswerVO answerVO);
     int updateQueAnswer(AnswerVO answerVO);
     QuestionVO getUserNoByQueNo(int queNo);
+    int selectQueCount();
 }
