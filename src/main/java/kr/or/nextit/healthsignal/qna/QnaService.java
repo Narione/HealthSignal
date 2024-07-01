@@ -42,8 +42,8 @@ public class QnaService {
         return questionVO;
     }
 
-    public int selectQueCount(){
-        return qnaMapper.selectQueCount();
+    public int selectQueCount(QuestionVO questionVO){
+        return qnaMapper.selectQueCount(questionVO);
     }
 
 }

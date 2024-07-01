@@ -55,7 +55,7 @@ const SignIn = () => {
                             <div className="d-flex justify-content-center align-items-center">
                                 <div className="content text-center p-5" style={{width:"500px",border:"1px solid lightgrey", borderRadius:"12px"}}>
                                     <div className="logo mb-5">
-                                        <a href="index.html"><img src="/images/logo.png" alt=""/></a>
+                                        <a onClick={() => navigate("/")} ><img src="/images/logo.png" alt=""/></a>
                                     </div>
                                     <form action="#">
                                         <input className="form-control main" type="text" placeholder="ID"
@@ -66,18 +66,17 @@ const SignIn = () => {
                                                required onKeyDown={pressEnter}/>
                                         {warning?<div style={{color: "red", marginBottom:"10px"}}>아이디 혹은 비밀번호가 일치하지않습니다.</div>:null}
                                         {noValue?<div style={{color: "green", marginBottom:"10px"}}>아이디, 비밀번호를 입력해주세요.</div>:null}
-                                        <button className="btn btn-main-sm"
+                                        <button className="btn btn-outline-primary"
                                                 type="button"
                                                 onClick={goSignIn}>sign in
                                         </button>
-                                    <button className="btn btn-main-sm ml-3"
+                                    <button className="btn btn-outline-danger ml-3"
                                                 type="button"
                                                 onClick={()=>{navigate("/")}}>cancel
                                         </button>
                                     </form>
 
                                     <div className="new-acount">
-                                        <a href="contact.html">Forget your password?</a>
                                         <p>Don't Have an account? <a href="/signup"> SIGN UP</a></p>
                                     </div>
                                 </div>

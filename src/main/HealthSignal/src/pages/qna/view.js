@@ -14,6 +14,51 @@ const QnaView = () => {
   //관리자여부
   const [isAdmin, setIsAdmin] = React.useState(false);
 
+  /* 각종함수 */
+  const getUserInfo = async () => {
+    await axios.post("/api/getuserinfo").then((res) => {
+      setUserInfo(res.data);
+      console.log("세션정보", res.data);
+    });
+  };
+
+  const getPrivateInfo = async () => {
+    try{
+      const res = await axios.get(`/api/qna/private?queNo=${queNo}`);
+      setPrivateInfo(res.data);
+    }catch(error){
+      console.error("Error selecting data:", error);
+    }
+  }
+
+  const getQuestionView = async () => {
+    try {
+      const res = await axios.get(`/api/question/view?queNo=${queNo}`);
+      setQuestion(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteQuestion = async () => {
+    await axios.get(`/api/question/delete?queNo=${queNo}`).then((res) => {
+      if(res.data===1){
+        navigate("/qna/list");
+      }
+    }).catch((err) => {
+      console.error(err);
+    })
+  }
+
+  const getAnswerView = async () => {
+    try{
+      const res = await axios.get(`/api/answer/view?queNo=${queNo}`);
+      setAnswer(res.data);
+    }catch (err){
+      console.error(err);
+    }
+  }
+
 
   useEffect(() => {
     getUserInfo();
@@ -44,62 +89,9 @@ const QnaView = () => {
   //답변글 불러오기
   useEffect(()=>{
     if(question!=null){
-    getAnswerView();
+      getAnswerView();
     }
   },[question])
-
-
-  /* 각종함수 */
-  const getUserInfo = async () => {
-    await axios.post("/api/getuserinfo").then((res) => {
-      setUserInfo(res.data);
-      console.log("세션정보", res.data);
-    });
-  };
-
-  const getPrivateInfo = async () => {
-    try{
-      const res = await axios.get(`/api/qna/private?queNo=${queNo}`);
-      setPrivateInfo(res.data);
-    }catch(error){
-      console.error("Error selecting data:", error);
-    }
-  }
-
-  const getQuestionView = async () => {
-
-
-    try {
-      const res = await axios.get(`/api/question/view?queNo=${queNo}`);
-      setQuestion(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-
-
-  };
-
-  const deleteQuestion = async () => {
-    await axios.get(`/api/question/delete?queNo=${queNo}`).then((res) => {
-      if(res.data===1){
-        navigate("/qna/list");
-      }
-    }).catch((err) => {
-      console.error(err);
-    })
-  }
-
-  const getAnswerView = async () => {
-    try{
-      const res = await axios.get(`/api/answer/view?queNo=${queNo}`);
-      setAnswer(res.data);
-    }catch (err){
-      console.error(err);
-    }
-  }
-
-
-
 
 
 
@@ -113,61 +105,61 @@ const QnaView = () => {
             <h3 className="text-center">문의 게시판</h3>
           </div>
         </div>
-        <div className="row question">
+        {question ? (<div className="row question">
           <div className="col-md-12 col-12">
             <div className="card">
               <div className="table-responsive">
                 <table className="mb-0 table">
                   <thead className="table-light">
-                    <tr>
-                      <th style={{ fontWeight: "normal" }} colSpan="4">
-                        <div style={{ fontSize: "25px", fontWeight: "normal" }}>
-                          <img
+                  <tr>
+                    <th style={{fontWeight: "normal"}} colSpan="4">
+                      <div style={{fontSize: "25px", fontWeight: "normal"}}>
+                        <img
                             src="/images/qna/icon-letter-q.png"
-                            style={{ width: "50px", height: "50px" }}
-                          />{" "}
-                          {question?question.queTitle:null}
-                        </div>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th
+                            style={{width: "50px", height: "50px"}}
+                        />{" "}
+                        {question.queTitle}
+                      </div>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th
                         className="align-middle"
                         style={{
                           width: "15%",
                           fontWeight: "normal",
                           textAlign: "center",
                         }}
-                      >
-                        작성자
-                      </th>
-                      <th
+                    >
+                      작성자
+                    </th>
+                    <th
                         className="align-middle bg-white"
-                        style={{ width: "35%", fontWeight: "normal" }}
-                      >
-                        {question?question.userNo:null}
-                      </th>
-                      <th
+                        style={{width: "35%", fontWeight: "normal"}}
+                    >
+                      {question.userNo}
+                    </th>
+                    <th
                         className="align-middle"
                         style={{
                           width: "15%",
                           fontWeight: "normal",
                           textAlign: "center",
                         }}
-                      >
-                        작성일
-                      </th>
-                      <th
+                    >
+                      작성일
+                    </th>
+                    <th
                         className="align-middle bg-white"
-                        style={{ width: "35%", fontWeight: "normal" }}
-                      >
-                        {question?moment(question.queCreDate).format('YYYY-MM-DD HH:mm'):null}
-                      </th>
-                    </tr>
+                        style={{width: "35%", fontWeight: "normal"}}
+                    >
+                      {moment(question.queCreDate).format('YYYY-MM-DD HH:mm')}
+                    </th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td
+                  <tr>
+                    <td
                         style={{
                           height: "200px",
                           // wordWrap: "break-word",
@@ -177,38 +169,45 @@ const QnaView = () => {
                           transition: "max-height 0.3s ease", /* 높이 변경 시 애니메이션 추가 */
                         }}
                         colSpan="4"
-                      >
-                        {question?question.queContent:null}
-                      </td>
-                    </tr>
+                    >
+                      <div style={{whiteSpace: 'pre-line'}}>
+                        {question.queContent}
+                      </div>
+                    </td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-        </div>
+        </div>):null}
 
-        {answer?(<div className="row answer mt-4">
+
+        {answer ? (<div className="row answer mt-4">
           <div className="col-md-12 col-12">
             <div className="card">
               <div className="table-responsive">
                 <table className="mb-0 table">
                   <thead className="table-light">
-                    <tr>
-                      <th style={{ fontWeight: "normal" }}>
-                        <div style={{ fontSize: "25px", fontWeight: "normal" }}>
-                          <img
+                  <tr>
+                    <th style={{fontWeight: "normal"}}>
+                      <div style={{fontSize: "25px", fontWeight: "normal"}}>
+                        <img
                             src="/images/qna/icon-letter-a.png"
-                            style={{ width: "50px", height: "50px" }}
-                          />{" "}
-                          {answer?answer.ansTitle:null}
-                        </div>
-                      </th>
-                        <th style={{width:"20%", verticalAlign:"middle", fontWeight:"normal"}}>{answer?moment(answer.ansCreDate).format('YYYY-MM-DD HH:mm'):null}</th>
-                    </tr>
+                            style={{width: "50px", height: "50px"}}
+                        />{" "}
+                        {answer.ansTitle}
+                      </div>
+                    </th>
+                    <th style={{
+                      width: "20%",
+                      verticalAlign: "middle",
+                      fontWeight: "normal"
+                    }}>{moment(answer.ansCreDate).format('YYYY-MM-DD HH:mm')}</th>
+                  </tr>
                   </thead>
-                    <tbody>
-                    <tr>
+                  <tbody>
+                  <tr>
                     <td
                         style={{
                           height: "200px",
@@ -220,7 +219,9 @@ const QnaView = () => {
                         }}
                         colSpan="2"
                     >
-                      {answer?answer.ansContent:null}
+                      <div style={{whiteSpace: 'pre-line'}}>
+                        {answer.ansContent}
+                      </div>
                     </td>
                   </tr>
                   </tbody>
@@ -228,13 +229,21 @@ const QnaView = () => {
               </div>
             </div>
           </div>
-        </div>):null}
-        <div className="container text-right mt-3">
-          <button className="btn btn-primary" onClick={()=>{navigate("/qna/list")}}>목록</button>
-          {isAdmin?(<><button className="btn btn-secondary ml-2" onClick={()=>{navigate(`/qna/admin/add/${queNo}`)}}>답변하기</button>
-              <button className="btn btn-secondary ml-2">답변수정</button></>):null}
+        </div>) : null}
+        {question? (<><div className="container text-right mt-3">
+          <button className="btn btn-primary" onClick={() => {
+            navigate("/qna/list")
+          }}>목록
+          </button>
+          {isAdmin ? (<>
+            <button className="btn btn-secondary ml-2" onClick={() => {
+              navigate(`/qna/admin/add/${queNo}`)
+            }}>답변하기
+            </button>
+          </>) : null}
           <button className="btn btn-danger ml-2" onClick={deleteQuestion}>삭제</button>
-        </div>
+        </div></>): null}
+
       </div>
     </>
   );

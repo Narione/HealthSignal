@@ -9,10 +9,15 @@ const UserAdd = () => {
 
   //글요소
   const [title, setTitle] = useState("");
-  const [publicYN, setPublicYN] = useState("Y");
+  const [publicYN, setPublicYN] = useState("");
   const [content, setContent] = useState("");
 
+  // 첨부파일 관련
+  const [selectedFile, setSelectedFile] = useState([]);
 
+  useEffect(()=>{
+    console.log("selectedFile",selectedFile)
+  },[selectedFile])
 
   //핸들러
   const titleOnChangeHandler = useCallback((e)=>{
@@ -26,6 +31,10 @@ const UserAdd = () => {
   const contentOnChangeHandler = useCallback((e)=>{
     setContent(e.target.value);
   },[])
+
+  const fileOnChangeHandler = useCallback((e) => {
+    setSelectedFile(e.target.files);
+  }, []);
 
   useEffect(() => {
     // 서버에서 데이터를 가져오는 비동기 함수
@@ -42,6 +51,12 @@ const UserAdd = () => {
 
   // 질문글 추가하기
   const goAddQuestion=async ()=>{
+
+    if(publicYN == ""){
+      alert("공개여부를 선택해주세요.");
+      return;
+    }
+
     await axios.post("/api/question/add",{
       userNo: userInfo.userNo,
       queTitle:title,
@@ -53,7 +68,45 @@ const UserAdd = () => {
         navigate("/qna/list")
       }
     })
+
+    uploadSelectFile();
+
   }
+
+  /* 첨부파일 관련 함수 */
+  const uploadSelectFile = () => {
+    const formData = new FormData();
+
+    // for...of 루프로 파일을 formData에 추가
+    for (const [index, file] of Array.from(selectedFile).entries()) {
+      formData.append(`file${index}`, file);
+    }
+
+    axios.post("/api/question/file/upload", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+        .then(res => {
+          console.log('Files uploaded successfully:', res.data);
+          // 업로드 성공 후 추가 로직 처리
+        })
+        .catch(err => {
+          console.error('File upload error:', err);
+          // 업로드 실패 후 추가 로직 처리
+        });
+  };
+
+  const encodeFileToBase64 = (fileBlob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        // setUserPreview(reader.result);
+        resolve();
+      };
+    });
+  };
 
   return (
     <>
@@ -106,7 +159,6 @@ const UserAdd = () => {
                               id="public"
                               name="publicFlag"
                               value="Y"
-                              checked
                               onChange={publicOnChangeHandler}
                             />{" "}
                             공개
@@ -144,6 +196,8 @@ const UserAdd = () => {
                           type="file"
                           id="formFileMultiple"
                           multiple
+                          onChange={fileOnChangeHandler}
+                          accept=".jpg, .png, .gif"
                         />
                       </th>
                     </tr>

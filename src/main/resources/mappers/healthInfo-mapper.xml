@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.healthsignal.healthInfo.HealthInfoMapper">
+    <!--로그인중인 유저의 클릭한 날짜 데이터 출력-->
+    <select id="selectHealthInfo" parameterType="healthInfoVO" resultType="healthInfoVO" >
+        SELECT
+             IPH_HEIGHT,
+             IPH_WEIGHT,
+             IPH_HIGH_PRESSURE,
+             IPH_LOW_PRESSURE
+        FROM
+             INPUT_HEALTH
+        WHERE
+            USER_NO = #{userNo}
+        AND
+            DATE(IPH_DATE) = DATE(#{iphDate})
+    </select>
+    <!-- 로그인중인 유저의 클릭중인 날짜의 건강정보 입력-->
+    <insert id="insertHealthInfo" parameterType="healthInfoVO">
+        INSERT INTO INPUT_HEALTH
+            (
+            USER_NO,
+            IPH_HEIGHT,
+            IPH_WEIGHT,
+            IPH_HIGH_PRESSURE,
+            IPH_LOW_PRESSURE,
+            IPH_DATE
+            )
+        VALUES
+            (
+            #{userNo},
+            #{iphHeight},
+            #{iphWeight},
+            #{iphHighPressure},
+            #{iphLowPressure},
+            #{iphDate}
+            )
+    </insert>
+
+</mapper>

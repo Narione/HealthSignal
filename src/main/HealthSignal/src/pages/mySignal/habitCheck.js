@@ -176,6 +176,14 @@ const HabitCheck = () => {
     }
   };
 
+  /* 키보드 누르기 */
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      // 엔터 키를 눌렀을 때 실행할 함수 호출
+      addHabit();
+    }
+  }
+
   return (
     <>
       <div className="container">
@@ -217,6 +225,7 @@ const HabitCheck = () => {
                     onChange={habitOnChangeHandler}
                     value={habitInput}
                     ref={habitInputRef}
+                    onKeyDown={handleKeyDown}
                   />
                   <button
                     type="button"

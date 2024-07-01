@@ -92,7 +92,7 @@ const Header = () => {
                                         <a className="dropdown-item active" href="index.html">건강모니터링</a>
                                     </li>
                                     <li className="mb-3">
-                                        <a className="dropdown-item" href="homepage-2.html">건강정보입력</a>
+                                        <a className="dropdown-item" onClick={()=> navigate("/healthinfo")}>건강정보입력</a>
                                     </li>
                                     <li className="mb-3">
                                         <a className="dropdown-item active3" href="/habitcheck">습관체크</a>
@@ -121,7 +121,7 @@ const Header = () => {
                                     <li className="mb-3">
                                         <a className="dropdown-item @@team" href="team.html">인증게시판</a></li>
                                     <li className="mb-3">
-                                        <a className="dropdown-item @@career" href="career.html">랭킹</a></li>
+                                        <a className="dropdown-item @@career" onClick={() => navigate("/social/ranking")}>랭킹</a></li>
                                     <li><a className="dropdown-item @@career" href="career.html">소셜채팅</a></li>
                                 </ul>
                             </li>

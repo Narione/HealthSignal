@@ -3,8 +3,15 @@ package kr.or.nextit.healthsignal.qna;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import java.util.ArrayList;
 
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
@@ -55,9 +62,37 @@ public class QnaController {
         return ResponseEntity.ok(questionVO);
     }
 
-    @GetMapping("/qna/count")
-    public int selectQueCount(){
-        int queCount = qnaService.selectQueCount();
+    @PostMapping("/qna/count")
+    public int selectQueCount(@RequestBody QuestionVO questionVO){
+        int queCount = qnaService.selectQueCount(questionVO);
         return queCount;
+    }
+
+    // 첨부파일 저장하기
+    @PostMapping("/question/file/upload")
+    public ResponseEntity<?> uploadFiles(@RequestParam Map<String, MultipartFile> files) throws IOException {
+
+        List<String> uploadedFileNames = new ArrayList<>();
+
+        for (Map.Entry<String, MultipartFile> entry : files.entrySet()) {
+            MultipartFile file = entry.getValue();
+            String originalFilename = file.getOriginalFilename();
+            String extension = "";
+            int dotIndex = originalFilename.lastIndexOf('.');
+            if (dotIndex > 0) {
+                extension = originalFilename.substring(dotIndex);
+            }
+            String uniqueFilename = UUID.randomUUID().toString() + extension;
+
+            String filePath = System.getProperty("user.dir") + "\\src\\main\\HealthSignal\\public\\images\\qna\\que_file";
+            File saveFile = new File(filePath, uniqueFilename);
+            file.transferTo(saveFile);
+
+            // 고유 파일 이름을 리스트에 추가
+            uploadedFileNames.add(uniqueFilename);
+        }
+
+        // 저장된 모든 파일 이름을 응답으로 반환
+        return ResponseEntity.ok().body(uploadedFileNames);
     }
 }

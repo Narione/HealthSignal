@@ -23,6 +23,9 @@ public class HabitController {
     @GetMapping("/habitcheck")
     public ResponseEntity<List<HabitCheckVO>> habitCheck(@RequestParam("habNo") int habNo) {
         List<HabitCheckVO> habitCheckList = habitService.getHabitCheck(habNo);
+            //1. 글조회, 비밀글인지여부 ->  select
+            //2. 댓글조회
+            //3. return {wirte: "", reply: ""}
         return ResponseEntity.ok().body(habitCheckList);
     }
 

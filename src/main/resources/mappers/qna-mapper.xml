@@ -19,21 +19,18 @@
         FROM
             QUESTION A
             LEFT OUTER JOIN USER B ON A.USER_NO = B.USER_NO
-        <where>
+        WHERE
             A.QUE_DEL = 'N'
-            <if test="searchType == 'title'">
-                and a.que_title like '%' || #{searchWord} || '%'
-            </if>
-            <if test="searchType == 'id'">
-                and b.user_id like '%' || #{searchWord} || '%'
-            </if>
-        </where>
+        <if test="searchType == 'title'">
+            AND A.QUE_TITLE LIKE CONCAT('%', #{searchWord}, '%')
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchWord}
+        </if>
         ORDER BY
-            QUE_CRE_DATE DESC
-        LIMIT
-            #{pageSize}
-        OFFSET
-            #{currentPage}
+            A.QUE_CRE_DATE DESC
+        LIMIT #{pageSize}
+        OFFSET #{currentPage}
     </select>
 
     <!--질문 글 가져오기-->
@@ -113,17 +110,21 @@
 
     <!--페이지네이션 -->
     <!--문의글 총 개수 출력-->
-    <select id="selectQueCount" resultType="int">
+    <select id="selectQueCount" parameterType="questionVO" resultType="int">
         SELECT
             COUNT(QUE_NO)
         FROM
-            QUESTION
+            QUESTION A
+            LEFT OUTER JOIN USER B ON A.USER_NO = B.USER_NO
         WHERE
             QUE_DEL = 'N'
+        <if test="searchType == 'title'">
+            AND A.QUE_TITLE LIKE CONCAT('%', #{searchWord}, '%')
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchWord}
+        </if>
     </select>
-    <!--검색기능-->
-    <select id="searchQuestions" parameterType="String" resultType="questionVO">
-        SELECT * FROM posts
+    <!--파일 DB 목록 넣기-->
 
-    </select>
 </mapper>

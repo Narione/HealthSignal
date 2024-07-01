@@ -36,7 +36,10 @@ const QnaList = () => {
 
  /* 문의글 개수 불러오기 */
   const getQueCnt = () => {
-    axios.get("/api/qna/count")
+    axios.post("/api/qna/count",{
+      searchType: searchType,
+      searchWord: searchWord
+    })
         .then(res=>setQueCount(res.data));
   }
 
