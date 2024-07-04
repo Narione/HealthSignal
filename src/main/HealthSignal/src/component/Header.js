@@ -29,6 +29,14 @@ const Header = () => {
             })
     }
 
+    //로그인 안되어있으면 이동 막기
+    const loginNeed = () =>{
+        if(!nowLoginFlag){
+            alert("로그인이 필요한 기능입니다.");
+            return;
+        }
+    }
+
     const goLogout = () => {
         axios.post("/api/logout")
             .then(res => {
@@ -89,13 +97,25 @@ const Header = () => {
                                 </a>
                                 <ul className="dropdown-menu menu2">
                                     <li className="mb-3">
-                                        <a className="dropdown-item active" href="index.html">건강모니터링</a>
+                                        <a className="dropdown-item" onClick={()=> {
+                                            if(!nowLoginFlag){
+                                                alert("로그인이 필요한 기능입니다.");
+                                            }else {
+                                                navigate("/monitoring");
+                                            }
+                                            }}>건강모니터링</a>
                                     </li>
                                     <li className="mb-3">
-                                        <a className="dropdown-item" onClick={()=> navigate("/healthinfo")}>건강정보입력</a>
+                                        <a className="dropdown-item" onClick={()=> {
+                                            if(!nowLoginFlag){
+                                                alert("로그인이 필요한 기능입니다.");
+                                            }else {navigate("/healthinfo")}}}>건강정보입력</a>
                                     </li>
                                     <li className="mb-3">
-                                        <a className="dropdown-item active3" href="/habitcheck">습관체크</a>
+                                        <a className="dropdown-item active3"  onClick={()=> {
+                                            if(!nowLoginFlag){
+                                                alert("로그인이 필요한 기능입니다.");
+                                            }else {navigate("/habitcheck")}}}>습관체크</a>
                                     </li>
                                     <li>
                                         <a className="dropdown-item active3" href="homepage-4.html">AI Helper</a>
@@ -122,14 +142,16 @@ const Header = () => {
                                         <a className="dropdown-item @@team" href="team.html">인증게시판</a></li>
                                     <li className="mb-3">
                                         <a className="dropdown-item @@career" onClick={() => navigate("/social/ranking")}>랭킹</a></li>
-                                    <li><a className="dropdown-item @@career" href="career.html">소셜채팅</a></li>
                                 </ul>
                             </li>
                             <li className="nav-item @@contact">
                                 <a className="nav-link menu1" onClick={() => navigate("/store")}>스토어</a>
                             </li>
                             <li className="nav-item @@contact">
-                                <a className="nav-link menu1" href="/qna/list">고객센터</a>
+                                <a className="nav-link menu1" onClick={()=> {
+                                    if(!nowLoginFlag){
+                                        alert("로그인이 필요한 기능입니다.");
+                                    }else {navigate("/qna/list")}}}>고객센터</a>
                             </li>
                         </ul>
 

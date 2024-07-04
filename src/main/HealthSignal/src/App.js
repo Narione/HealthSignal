@@ -16,6 +16,7 @@ import AdminAdd from "./pages/qna/adminAdd";
 import Reserve from "./pages/planner/reserve";
 import Ranking from "./pages/social/ranking";
 import HealthInfo from "./pages/mySignal/healthInfo";
+import HealthMonitoring from "./pages/mySignal/healthMonitoring";
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/qna/admin/update" element={<AdminUpdate/>} />
                 <Route path="/social/ranking" element={<Ranking/>} />
                 <Route path="/healthinfo" element={<HealthInfo/>} />
+                <Route path="/monitoring" element={<HealthMonitoring/>} />
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
 
