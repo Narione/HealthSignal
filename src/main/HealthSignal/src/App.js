@@ -17,6 +17,9 @@ import Reserve from "./pages/planner/reserve";
 import Ranking from "./pages/social/ranking";
 import HealthInfo from "./pages/mySignal/healthInfo";
 import HealthMonitoring from "./pages/mySignal/healthMonitoring";
+import SelfCheckup from "./pages/planner/selfcheckup";
+import SelfCheckup2 from "./pages/planner/selfcheckup2";
+import Selfcheckup3 from "./pages/planner/selfcheckup3";
 
 function App() {
 
@@ -43,7 +46,11 @@ function App() {
                 <Route path="/social/ranking" element={<Ranking/>} />
                 <Route path="/healthinfo" element={<HealthInfo/>} />
                 <Route path="/monitoring" element={<HealthMonitoring/>} />
+                <Route path="/selfcheckup" element={<SelfCheckup/>} />
+                <Route path="/selfcheckup2" element={<SelfCheckup2/>} />
+                <Route path="/selfcheckup3" element={<Selfcheckup3/>} />
                 {/*<Route path="/login" element={<Login/>}/>*/}
+
 
 
             </Routes>

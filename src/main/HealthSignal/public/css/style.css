@@ -2254,3 +2254,48 @@ hr {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.part_choiceInner {
+  text-align: center; /* Center align contents */
+  max-width: 600px; /* Adjust max-width as needed */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.part_choiceInner .clearfix {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center items in flex container */
+}
+
+.part_choiceInner .clearfix li {
+  width: calc(33.33% - 20px); /* Adjust width to fit three items per row */
+  margin: 10px; /* Adjust margin between items */
+  text-align: center;
+}
+
+.part_choiceInner .clearfix li img {
+  max-width: 100%; /* Ensure images resize properly */
+}
+.part_choiceHeader {
+  text-align: center; /* Center align text */
+  margin-bottom: 20px; /* Add margin for spacing */
+}
+.part_choiceHeader {
+  font-weight: bolder;
+  text-align: center;
+}
+.list-unstyled {
+  list-style-type: none; /* 리스트 스타일 제거 */
+}
+.text-white {
+  color: white; /* 텍스트 색상을 흰색으로 설정 */
+}
+.text-center {
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+.fw-bold {
+  font-weight: bold; /* 폰트를 볼드(bold)로 설정 */
+}

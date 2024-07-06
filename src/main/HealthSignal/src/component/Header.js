@@ -129,7 +129,7 @@ const Header = () => {
                                 <ul className="dropdown-menu">
 
                                     <li className="mb-3">
-                                        <a className="dropdown-item @@team" href="team.html">셀프검진</a></li>
+                                        <a className="dropdown-item @@team" onClick={() => navigate("/selfcheckup")}>셀프검진</a></li>
                                     <li><a className="dropdown-item @@career" onClick={() => navigate("/reserve")}>병원예약</a></li>
                                 </ul>
                             </li>

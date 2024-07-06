@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
+
 const Reserve = () => {
     const navigate = useNavigate()
     const findRef = useRef();
@@ -70,10 +71,10 @@ const Reserve = () => {
     }, [userCity, visibleCount]);
 
 
+
     return (
 
         <div>
-
 
             <section className="py-5">
                 <div className="container">
@@ -102,22 +103,26 @@ const Reserve = () => {
                     <div className="row flex-column flex-lg-row row-cols-2">
                         {
                             hospitalList.map((v, i) => {
+                                const randomNumber = Math.floor(Math.random() * 100) + 1;
                                 return (
                                     <div key={i}>
                                         <div className="col mb-6 mb-lg-0">
                                             <div className="card text-center mt-5">
                                                 <div>
-                                                    <div
-                                                        className="card-img-top d-flex justify-content-center">
+                                                    <div className="card-img-top d-flex justify-content-center">
                                                         <img className="img-fluid mt-3"
-                                                             style={{height: '30%', width: '50%'}}
-                                                             src="https://thumbs.dreamstime.com/b/hospital-building-modern-parking-lot-59693686.jpg"
+                                                             style={{
+                                                                 height: '200px',
+                                                                 width: '300px'
+                                                             }} // 이미지 크기 고정 (예시로 200px 높이, 300px 너비)
+                                                             src={`/images/hospital/${i + randomNumber}.png`}
                                                              alt=""/>
                                                     </div>
                                                 </div>
-                                                <div className=" card-body mx-auto">
-                                                    <div style={{width: '100%'}}><h3
-                                                        className="mt-3 mb-4">{v.hosName}</h3></div>
+                                                <div className="card-body mx-auto">
+                                                    <div style={{width: '100%'}}>
+                                                        <h3 className="mt-3 mb-4">{v.hosName}</h3>
+                                                    </div>
                                                     <p className="mt-3 mb-4">{v.hosCategory}</p>
                                                     <p className="mt-3 mb-4">{v.hosAddress}</p>
                                                     <p className="mt-3 mb-4">{v.hosPhone}</p>

@@ -117,7 +117,7 @@ const Store = () => {
                                         </div>
                                         <div className="card-footer p-4 pt-0 bg-transparent">
                                             <div className="text-center pt-2">
-                                                <a className="btn btn-outline-dark mt-auto">View options</a>
+                                                <a className="btn btn-outline-dark mt-auto" href={v.strLink} target="_blank">구매하러 가기</a>
                                             </div>
                                         </div>
                                     </div>
