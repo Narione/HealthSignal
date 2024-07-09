@@ -20,6 +20,8 @@ import HealthMonitoring from "./pages/mySignal/healthMonitoring";
 import SelfCheckup from "./pages/planner/selfcheckup";
 import SelfCheckup2 from "./pages/planner/selfcheckup2";
 import Selfcheckup3 from "./pages/planner/selfcheckup3";
+import Certboard from "./pages/social/certboard";
+import Certboard2 from "./pages/social/certboard2";
 
 function App() {
 
@@ -49,6 +51,8 @@ function App() {
                 <Route path="/selfcheckup" element={<SelfCheckup/>} />
                 <Route path="/selfcheckup2" element={<SelfCheckup2/>} />
                 <Route path="/selfcheckup3" element={<Selfcheckup3/>} />
+                <Route path="/certboard" element={<Certboard/>} />
+                <Route path="/certboard2" element={<Certboard2/>} />
                 {/*<Route path="/login" element={<Login/>}/>*/}
 
 

@@ -117,9 +117,6 @@ const Header = () => {
                                                 alert("로그인이 필요한 기능입니다.");
                                             }else {navigate("/habitcheck")}}}>습관체크</a>
                                     </li>
-                                    <li>
-                                        <a className="dropdown-item active3" href="homepage-4.html">AI Helper</a>
-                                    </li>
                                 </ul>
                             </li>
                             <li className="nav-item dropdown @@pages">
@@ -129,7 +126,10 @@ const Header = () => {
                                 <ul className="dropdown-menu">
 
                                     <li className="mb-3">
-                                        <a className="dropdown-item @@team" onClick={() => navigate("/selfcheckup")}>셀프검진</a></li>
+                                        <a className="dropdown-item @@team" onClick={()=> {
+                                            if(!nowLoginFlag){
+                                                alert("로그인이 필요한 기능입니다.");
+                                            }else {navigate("/selfcheckup")}}}>셀프검진</a></li>
                                     <li><a className="dropdown-item @@career" onClick={() => navigate("/reserve")}>병원예약</a></li>
                                 </ul>
                             </li>
@@ -139,7 +139,10 @@ const Header = () => {
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li className="mb-3">
-                                        <a className="dropdown-item @@team" href="team.html">인증게시판</a></li>
+                                        <a className="dropdown-item @@team"  onClick={()=> {
+                                            if(!nowLoginFlag){
+                                                alert("로그인이 필요한 기능입니다.");
+                                            }else {navigate("/certboard")}}}>인증게시판</a></li>
                                     <li className="mb-3">
                                         <a className="dropdown-item @@career" onClick={() => navigate("/social/ranking")}>랭킹</a></li>
                                 </ul>
