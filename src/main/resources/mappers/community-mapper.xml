@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.healthsignal.community.CommunityMapper">
+    <select id="getCommunityList" resultType="communityVO">
+        select c.CMNT_NO, u.USER_NICKNAME nick_name, c.CMNT_BFT, CMNT_LCH, c.CMNT_DIR, c.CMNT_STEP
+        from community c
+        inner join user u
+        on  u.USER_NO = c.USER_NO
+        order by c.CMNT_STEP desc
+    </select>
+
+    <insert id="addCommunity" parameterType="communityVO">
+        insert into community (USER_NO,CMNT_BFT,CMNT_LCH,CMNT_DIR,CMNT_STEP)
+        values (#{userNo},#{cmntBft},#{cmntLCH},#{cmntDIR},#{cmntStep})
+    </insert>
+</mapper>
