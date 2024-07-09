@@ -106,50 +106,50 @@ const HealthMonitoring = () => {
                         : null}
                 </div>
             </div>
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="card mb-4">
-                        <div className="card-header">
-                            <span className="ti-pulse mr-1"/>
-                            기기 입력 정보
-                        </div>
-                        <div className="card-body">
-                            <table>
-                                <tr>
-                                    <td style={{width: "100px", padding: "10px"}}>걸음수</td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            readOnly
-                                            className="form-control w-100"
-                                            style={{display: "inline"}}
-                                        />
-                                    </td>
-                                    <td style={{padding: "10px"}}>걸음2</td>
-                                </tr>
-                                <tr>
-                                    <td style={{width: "100px", padding: "10px"}}>심박수</td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            readOnly
-                                            className="form-control w-100"
-                                            style={{display: "inline"}}
-                                        />
-                                    </td>
-                                    <td style={{padding: "10px"}}>bpm</td>
-                                </tr>
-                            </table>
-                            <div className="text-center mt-2">
-                                <button className="btn btn-outline-secondary">전송</button>
-                            </div>
-                        </div>
-                        <div className="card-footer small text-muted">
-                            This is the value for{" "}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/*<div className="row">*/}
+            {/*    <div className="col-lg-12">*/}
+            {/*        <div className="card mb-4">*/}
+            {/*            <div className="card-header">*/}
+            {/*                <span className="ti-pulse mr-1"/>*/}
+            {/*                기기 입력 정보*/}
+            {/*            </div>*/}
+            {/*            <div className="card-body">*/}
+            {/*                <table>*/}
+            {/*                    <tr>*/}
+            {/*                        <td style={{width: "100px", padding: "10px"}}>걸음수</td>*/}
+            {/*                        <td>*/}
+            {/*                            <input*/}
+            {/*                                type="text"*/}
+            {/*                                readOnly*/}
+            {/*                                className="form-control w-100"*/}
+            {/*                                style={{display: "inline"}}*/}
+            {/*                            />*/}
+            {/*                        </td>*/}
+            {/*                        <td style={{padding: "10px"}}>걸음</td>*/}
+            {/*                    </tr>*/}
+            {/*                    <tr>*/}
+            {/*                        <td style={{width: "100px", padding: "10px"}}>심박수</td>*/}
+            {/*                        <td>*/}
+            {/*                            <input*/}
+            {/*                                type="text"*/}
+            {/*                                readOnly*/}
+            {/*                                className="form-control w-100"*/}
+            {/*                                style={{display: "inline"}}*/}
+            {/*                            />*/}
+            {/*                        </td>*/}
+            {/*                        <td style={{padding: "10px"}}>bpm</td>*/}
+            {/*                    </tr>*/}
+            {/*                </table>*/}
+            {/*                <div className="text-center mt-2">*/}
+            {/*                    <button className="btn btn-outline-secondary">전송</button>*/}
+            {/*                </div>*/}
+            {/*            </div>*/}
+            {/*            <div className="card-footer small text-muted">*/}
+            {/*                This is the value for{" "}*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </div>
     </main>
   );

@@ -3,8 +3,11 @@ import Calendar from 'react-calendar';
 import moment from 'moment';
 import '../../css/calendar.css';
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const HealthInfo = () => {
+    const navigate = useNavigate();
+
     const [date, setDate] = useState("");
     const [mark, setMark] = useState([]); // 예제 데이터를 위해 빈 배열로 초기화
     const [userInfo, setUserInfo] = useState({});
@@ -129,7 +132,7 @@ const HealthInfo = () => {
             res => {
                 if (res.data === "success") {
                     alert("입력되었습니다.");
-                    window.location.reload();
+                    navigate("/healthinfo");
                 }
             }
         )

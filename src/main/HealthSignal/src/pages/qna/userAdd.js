@@ -109,57 +109,57 @@ const UserAdd = () => {
   };
 
   return (
-    <>
-      <div className="container mt-5 mb-5">
-        <div className="row mb-3">
-          <div className="col-12 mb-3">
-            <h3 className="text-center">문의 게시판</h3>
+      <>
+        <div className="container mt-5 mb-5">
+          <div className="row mb-3">
+            <div className="col-12 mb-3">
+              <h3 className="text-center">문의 게시판</h3>
+            </div>
           </div>
-        </div>
-        <div className="row question">
-          <div className="col-md-12 col-12">
-            <div className="card">
-              <div className="table-responsive">
-                <table className="text-nowrap mb-0 table">
-                  <thead className="table-light">
+          <div className="row question">
+            <div className="col-md-12 col-12">
+              <div className="card">
+                <div className="table-responsive">
+                  <table className="text-nowrap mb-0 table">
+                    <thead className="table-light">
                     <tr>
                       <th
-                        style={{
-                          width: "15%",
-                          fontWeight: "normal",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                        }}
+                          style={{
+                            width: "10%",
+                            fontWeight: "normal",
+                            textAlign: "center",
+                            verticalAlign: "middle",
+                          }}
                       >
                         <div style={{ fontWeight: "normal" }}>제목</div>
                       </th>
-                      <th colSpan="3" className="align-middle bg-white">
+                      <th className="align-middle bg-white">
                         <input className="form-control" type="text" onChange={titleOnChangeHandler}/>
                       </th>
                     </tr>
                     <tr>
                       <th
-                        className="align-middle"
-                        style={{
-                          width: "15%",
-                          fontWeight: "normal",
-                          textAlign: "center",
-                        }}
+                          className="align-middle"
+                          style={{
+                            width: "10%",
+                            fontWeight: "normal",
+                            textAlign: "center",
+                          }}
                       >
                         공개여부
                       </th>
                       <th
-                        className="align-middle bg-white"
-                        style={{ width: "35%", fontWeight: "normal" }}
+                          className="align-middle bg-white"
+                          style={{ width: "35%", fontWeight: "normal" }}
                       >
                         <span style={{ marginLeft: "20px" }}>
                           <label htmlFor="public">
                             <input
-                              type="radio"
-                              id="public"
-                              name="publicFlag"
-                              value="Y"
-                              onChange={publicOnChangeHandler}
+                                type="radio"
+                                id="public"
+                                name="publicFlag"
+                                value="Y"
+                                onChange={publicOnChangeHandler}
                             />{" "}
                             공개
                           </label>
@@ -167,64 +167,41 @@ const UserAdd = () => {
                         <span style={{ marginLeft: "30px" }}>
                           <label htmlFor="private">
                             <input
-                              type="radio"
-                              id="private"
-                              name="publicFlag"
-                              value="N"
-                              onChange={publicOnChangeHandler}
+                                type="radio"
+                                id="private"
+                                name="publicFlag"
+                                value="N"
+                                onChange={publicOnChangeHandler}
                             />{" "}
                             비공개
                           </label>
                         </span>
                       </th>
-                      <th
-                        className="align-middle"
-                        style={{
-                          width: "15%",
-                          fontWeight: "normal",
-                          textAlign: "center",
-                        }}
-                      >
-                        첨부파일
-                      </th>
-                      <th
-                        className="align-middle bg-white"
-                        style={{ width: "35%", fontWeight: "normal" }}
-                      >
-                        <input
-                          className="form-control"
-                          type="file"
-                          id="formFileMultiple"
-                          multiple
-                          onChange={fileOnChangeHandler}
-                          accept=".jpg, .png, .gif"
-                        />
-                      </th>
                     </tr>
-                  </thead>
-                  <tbody>
+                    </thead>
+                    <tbody>
                     <tr>
                       <td className="align-middle" colSpan="4">
-                              <div style={{padding:'10px'}}>
+                        <div style={{padding:'10px'}}>
                                   <textarea className="form-control"
                                             rows="15"
                                             style={{width:"100%", resize:"none"}}
                                             onChange={contentOnChangeHandler}
                                   ></textarea>
-                              </div>
+                        </div>
                       </td>
                     </tr>
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-            <div style={{margin:'10px', textAlign:'right'}}>
-            <button type="button" className="btn btn-primary" onClick={goAddQuestion}>글 등록</button>
+              <div style={{margin:'10px', textAlign:'right'}}>
+                <button type="button" className="btn btn-primary" onClick={goAddQuestion}>글 등록</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </>
   );
 };
 

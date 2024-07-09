@@ -140,7 +140,6 @@ const MyPage = () => {
             if (res.data === "updateProfileSuccess") {
                 alert("프로필 정보가 업데이트 되었습니다.");
                 navigate("/mypage");
-                window.location.reload();
             }
         })
     }
@@ -165,9 +164,9 @@ const MyPage = () => {
     const deleteOldFile = () => {
         axios.post("/api/file/delete", userPhoto)
             .then(res => {
-            return(res.data)
-            }
-        )
+                    return(res.data)
+                }
+            )
     }
 
     const encodeFileToBase64 = (fileBlob) => {
@@ -217,7 +216,7 @@ const MyPage = () => {
                                 if (res.data === "updatePasswordSuccess") {
                                     alert("비밀번호 변경이 완료되었습니다.");
                                     navigate("/mypage");
-                                    window.location.reload();
+
                                 }
                             })
                         }
@@ -259,16 +258,12 @@ const MyPage = () => {
                                         </div>
 
 
-                                        <ul className="list-group list-group-flush mb-4">
-                                            <li className="list-group-item d-flex justify-content-between align-items-center">
-                                                <h6 className="m-0">랭킹</h6>
-                                                <span>28</span>
-                                            </li>
-                                            <li className="list-group-item d-flex justify-content-between align-items-center">
-                                                <h6 className="m-0">친구 수</h6>
-                                                <span>42</span>
-                                            </li>
-                                        </ul>
+                                        {/*<ul className="list-group list-group-flush mb-4">*/}
+                                        {/*    <li className="list-group-item d-flex justify-content-between align-items-center">*/}
+                                        {/*        <h6 className="m-0">랭킹</h6>*/}
+                                        {/*        <span>28</span>*/}
+                                        {/*    </li>*/}
+                                        {/*</ul>*/}
 
                                     </div>
                                 </div>
@@ -404,7 +399,7 @@ const MyPage = () => {
                                     <div className="tab-pane fade" id="password-tab-pane" role="tabpanel"
                                          aria-labelledby="password-tab" tabIndex="0">
                                         <form action="" ref={passwordFormRef} className={'needs-validation'}>
-                                        <div className="row gy-3 gy-xxl-4">
+                                            <div className="row gy-3 gy-xxl-4">
                                                 <div className="col-12">
                                                     <label htmlFor="currentPassword" className="form-label">현재 비밀번호</label>
                                                     <input type="password" className="form-control" ref={currentPasswordRef} onChange={currentPasswordOnchangeHandler} required/>

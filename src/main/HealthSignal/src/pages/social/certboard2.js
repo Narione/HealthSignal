@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 
 const Certboard2 = () => {
-
+    const navigate = useNavigate();
     const [steps ,setSteps] = useState("")
     const [morning , setMorning] = useState("")
     const [lunch  , setLunch] = useState("")
@@ -15,11 +16,19 @@ const Certboard2 = () => {
     const [userInfo, setUserInfo] = useState({});
     // 현재 세션에 접속되있는 유저의 정보 얻어오기
 
-   useEffect(async ()=>{
+    useEffect(()=>{
+        getUserInfo();
+    },[])
 
-       const res = await axios.post("/api/getuserinfo")
-       setUserNo(res.data.userNo)
-   },[])
+    useEffect(()=>{
+        if(userInfo !== null){
+            setUserNo(userInfo.userNo)
+        }
+    },[userInfo])
+
+    const getUserInfo = async () => {
+        await axios.post("/api/getuserinfo").then(res=>setUserInfo(res.data));
+    }
 
     //걸음수
     const StepOnChangeHandler = useCallback((e) => {
@@ -46,22 +55,21 @@ const Certboard2 = () => {
     // 게시글 추가 함수
     const addPost = async () => {
         try {
-            const res = await axios.post("/api/addCM", {
+            await axios.post("/api/addCM", {
                 cmntStep: steps,
                 cmntBft: morning,
                 cmntLCH: lunch,
                 cmntDIR: dinner,
                 userNo: userNo
             });
-            window.location.href= "/certboard"
-
+            navigate("/certboard");
         } catch (error) {
             console.error("업데이트 에러야", error);
         }
     };
     return (
-        <div className="certboard" style={{ textAlign: 'center' }}>
-            <h2>게시판</h2>
+        <div className="certboard container" style={{ textAlign: 'center', paddingLeft:"400px",paddingRight:"400px" }}>
+            <h2 className="mb-5">인증게시판</h2>
 
             {/* 게시글 작성 폼 */}
             <form>
@@ -73,39 +81,43 @@ const Certboard2 = () => {
                         name="steps"
                         value={steps}
                         onChange={StepOnChangeHandler}
+                        className="form-control"
                     />
                 </div>
                 <div>
-                    <label htmlFor="morning">아침:</label><br />
+                    <label htmlFor="morning">아침식단:</label><br />
                     <input
                         type="text"
                         id="morning"
                         name="morning"
                         value={morning}
                         onChange={MorningOnChangeHandler}
+                        className="form-control"
                     />
                 </div>
                 <div>
-                    <label htmlFor="lunch">점심:</label><br />
+                    <label htmlFor="lunch">점심식단:</label><br />
                     <input
                         type="text"
                         id="lunch"
                         name="lunch"
                         value={lunch}
                         onChange={LunchOnChangeHandler}
+                        className="form-control"
                     />
                 </div>
                 <div>
-                    <label htmlFor="dinner">저녁:</label><br />
+                    <label htmlFor="dinner">저녁식단:</label><br />
                     <input
                         type="text"
                         id="dinner"
                         name="dinner"
                         value={dinner}
                         onChange={DinnerOnChangeHandler}
+                        className="form-control"
                     />
                 </div>
-                <button className="mt-4" type="button" onClick={addPost}>게시글 작성</button>
+                <button className="mt-4 btn btn-secondary" type="button" onClick={addPost}>게시글 작성</button>
             </form>
         </div>
     );

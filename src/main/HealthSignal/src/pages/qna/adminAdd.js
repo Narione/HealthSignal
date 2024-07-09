@@ -62,29 +62,6 @@ const AdminAdd = () => {
                                             <input className="form-control" type="text" onChange={titleOnChangeHandler}/>
                                         </th>
                                     </tr>
-                                    <tr>
-                                        <th
-                                            className="align-middle"
-                                            style={{
-                                                width: "15%",
-                                                fontWeight: "normal",
-                                                textAlign: "center",
-                                            }}
-                                        >
-                                            첨부파일
-                                        </th>
-                                        <th
-                                            className="align-middle bg-white"
-                                            style={{fontWeight: "normal" }}
-                                        >
-                                            <input
-                                                className="form-control"
-                                                type="file"
-                                                id="formFileMultiple"
-                                                multiple
-                                            />
-                                        </th>
-                                    </tr>
                                     </thead>
                                     <tbody>
                                     <tr>

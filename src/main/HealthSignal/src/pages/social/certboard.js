@@ -9,12 +9,13 @@ const Certboard = () => {
 
     // Fetch data on component mount
     useEffect(() => {
-        const fetchData = async () => {
-            const res = await axios.post("/api/getCL");
-            setCmList(res.data);
-        };
         fetchData();
     }, []);
+
+    const fetchData = async () => {
+        await axios.post("/api/getCL").then(res=>
+            setCmList(res.data))
+    };
 
     // Calculate the start and end index of items to display on the current page
     const itemsPerPage = 9;
